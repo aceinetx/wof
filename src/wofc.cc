@@ -7,7 +7,7 @@
 int main() {
 	std::string code = R"(
 (fun i8 main () (
-  (return 0)
+	(return 0)
 ))
 (fun i32 add () (
 	(return (* 23 3))
