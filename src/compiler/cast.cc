@@ -20,28 +20,28 @@ Value *Compiler::castValue(Value *value, Type *targetType) {
 	if (PointerType *ptrType = dyn_cast<PointerType>(value->getType())) {
 		if (targetType->isIntegerTy()) {
 			// Pointer to Integer cast
-			return builder.CreatePtrToInt(value, targetType, "ptr_to_int");
+			return builder.CreatePtrToInt(value, targetType);
 		}
 	} else if (PointerType *targetPtrType = dyn_cast<PointerType>(targetType)) {
 		if (value->getType()->isIntegerTy()) {
 			// Integer to Pointer cast
-			return builder.CreateIntToPtr(value, targetPtrType, "int_to_ptr");
+			return builder.CreateIntToPtr(value, targetPtrType);
 		}
 	}
 
 	// Perform the cast based on the types
 	if (value->getType()->isIntegerTy() && targetType->isIntegerTy()) {
 		// Integer to Integer cast
-		return builder.CreateIntCast(value, targetType, true, "int_cast");
+		return builder.CreateIntCast(value, targetType, true);
 	} else if (value->getType()->isFloatingPointTy() && targetType->isFloatingPointTy()) {
 		// Float to Float cast
-		return builder.CreateFPCast(value, targetType, "fp_cast");
+		return builder.CreateFPCast(value, targetType);
 	} else if (value->getType()->isIntegerTy() && targetType->isFloatingPointTy()) {
 		// Integer to Float cast
-		return builder.CreateSIToFP(value, targetType, "int_to_fp");
+		return builder.CreateSIToFP(value, targetType);
 	} else if (value->getType()->isFloatingPointTy() && targetType->isIntegerTy()) {
 		// Float to Integer cast
-		return builder.CreateFPToSI(value, targetType, "fp_to_int");
+		return builder.CreateFPToSI(value, targetType);
 	} else if (value->getType()->isIntegerTy() && targetType->isIntegerTy()) {
 		// Handle cases where the bit sizes differ
 		IntegerType *sourceType = dyn_cast<IntegerType>(value->getType());
@@ -50,10 +50,10 @@ Value *Compiler::castValue(Value *value, Type *targetType) {
 		if (sourceType && targetIntType) {
 			if (sourceType->getBitWidth() > targetIntType->getBitWidth()) {
 				// Source type has more bits than target type, perform truncation
-				return builder.CreateTrunc(value, targetType, "trunc");
+				return builder.CreateTrunc(value, targetType);
 			} else if (sourceType->getBitWidth() < targetIntType->getBitWidth()) {
 				// Source type has fewer bits than target type, perform extension
-				return builder.CreateZExt(value, targetType, "zext"); // Use CreateSExt for signed extension
+				return builder.CreateZExt(value, targetType); // Use CreateSExt for signed extension
 			}
 		}
 	}

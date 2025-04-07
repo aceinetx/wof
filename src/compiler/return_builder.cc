@@ -13,8 +13,12 @@ bool Compiler::doReturn(SExprObject object) {
 		if (!value) {
 			return false;
 		}
+		Value *castedValue = castValue(value, functions[currentFunction].type->getReturnType());
+		if (!castedValue) {
+			return false;
+		}
 
-		builder.CreateRet(value);
+		builder.CreateRet(castedValue);
 	} else if (object.children.size() == 1) {
 		builder.CreateRet(nullptr);
 	} else {

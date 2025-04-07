@@ -13,7 +13,7 @@ Value *Compiler::doExpr(SExprObject object) {
 			return cnst;
 		} else if (object.token.type == Token::FLOATING) {
 			type = builder.getDoubleTy();
-			Constant *cnst = ConstantInt::get(type, object.token.valueF);
+			Constant *cnst = ConstantFP::get(type, object.token.valueF);
 			return cnst;
 		} else {
 			ERROR("[{}] Invalid one-constant value type", object.token.line);
@@ -23,7 +23,12 @@ Value *Compiler::doExpr(SExprObject object) {
 		if (object.children.size() == 3) {
 			if (object.children[0].token.type == Token::OPERATOR) {
 				Value *left = doExpr(object.children[1]);
+				if (!left)
+					return nullptr;
 				Value *right = doExpr(object.children[2]);
+				if (!right)
+					return nullptr;
+
 				Value *res = nullptr;
 
 				switch (object.children[0].token.valueC) {
