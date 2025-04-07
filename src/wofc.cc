@@ -10,9 +10,4 @@ int main() {
 )";
 
 	Lexer lexer(code);
-	Token token = lexer.next();
-	while (token.type != Token::END) {
-		std::cout << token.type << " " << token.valueS << " " << token.valueI << " " << token.valueF << "\n";
-		token = lexer.next();
-	}
 }
