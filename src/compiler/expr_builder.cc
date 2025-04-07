@@ -15,6 +15,13 @@ Value *Compiler::doExpr(SExprObject object) {
 			type = builder.getDoubleTy();
 			Constant *cnst = ConstantFP::get(type, object.token.valueF);
 			return cnst;
+		} else if (object.token.type == Token::IDENTIFIER) {
+			WofFunction &func = functions[currentFunction];
+			if (!func.variables.contains(object.token.valueS)) {
+				ERROR("[{}] Undefined variable", object.token.line);
+				return nullptr;
+			}
+			return func.variables[object.token.valueS].value;
 		} else {
 			ERROR("[{}] Invalid one-constant value type", object.token.line);
 			return nullptr;

@@ -3,12 +3,19 @@
 #include <pch.hpp>
 #include <sexpr.hpp>
 
+typedef struct WofVariable {
+	llvm::Value *value;
+	std::string name;
+} WofVariable;
+
 typedef struct WofFunction {
 	llvm::Function *function;
 	llvm::BasicBlock *block;
 	llvm::FunctionType *type;
 
 	std::string name;
+
+	std::map<std::string, WofVariable> variables;
 } WofFunction;
 
 class Compiler {

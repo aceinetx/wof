@@ -9,7 +9,8 @@ bool Compiler::doFunction(SExprObject object) {
 	SExprObject &args = object.children[3];
 	SExprObject &body = object.children[4];
 
-	std::map<std::string, Type *> args_map;
+	std::vector<Type *> argTypes;
+	std::vector<std::string> argNames;
 
 	if (type.type != Token::IDENTIFIER) {
 		ERROR("[{}] Excepted a IDENTIFIER after fun", name.line);
@@ -28,20 +29,21 @@ bool Compiler::doFunction(SExprObject object) {
 		}
 
 		if (arg.children.size() == 2) {
-			Token arg_type = arg.children[0].token;
-			Token arg_name = arg.children[1].token;
+			Token argType = arg.children[0].token;
+			Token argName = arg.children[1].token;
 
-			if (arg_type.type != Token::IDENTIFIER) {
-				ERROR("[{}] Argument type should be an identifier", arg_type.line);
+			if (argType.type != Token::IDENTIFIER) {
+				ERROR("[{}] Argument type should be an identifier", argType.line);
 				return false;
 			}
 
-			if (arg_name.type != Token::IDENTIFIER) {
-				ERROR("[{}] Argument name should be an identifier", arg_name.line);
+			if (argName.type != Token::IDENTIFIER) {
+				ERROR("[{}] Argument name should be an identifier", argName.line);
 				return false;
 			}
 
-			args_map[arg_name.valueS] = getTypeFromName(arg_type.valueS);
+			argTypes.push_back(getTypeFromName(argType.valueS));
+			argNames.push_back(argName.valueS);
 		} else {
 			ERROR("[{}] There should be only 2 child operands", name.line);
 			return false;
@@ -54,7 +56,7 @@ bool Compiler::doFunction(SExprObject object) {
 	}
 
 	WofFunction function;
-	function.type = FunctionType::get(retType, false);
+	function.type = FunctionType::get(retType, argTypes, false);
 	function.function = Function::Create(function.type, Function::ExternalLinkage, name.valueS, fmodule);
 	function.block = BasicBlock::Create(context, name.valueS + "b", function.function);
 
@@ -67,6 +69,15 @@ bool Compiler::doFunction(SExprObject object) {
 	// create arguments for future use
 	auto fnArgs = function.function->arg_begin();
 	Value *arg = fnArgs++;
+	for (int i = 0; i < argNames.size(); i++) {
+		WofVariable variable;
+		variable.name = argNames[i];
+		variable.value = arg;
+
+		functions[currentFunction].variables[variable.name] = variable;
+
+		arg = fnArgs++;
+	}
 
 	if (!doBody(body)) {
 		return false;

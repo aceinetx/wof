@@ -6,7 +6,7 @@
 
 int main() {
 	std::string code = R"(
-( fun i8 main ( (i32 argc) ) (
+( fun i32 main ( (i32 argc) ) (
 	( return argc )
 ) )
 )";
