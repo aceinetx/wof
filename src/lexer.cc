@@ -103,6 +103,7 @@ Token Lexer::next() {
 			token.type = Token::RPAREN;
 			pos++;
 		}
+		// todo: strings
 
 		if (token.type != Token::UNKNOWN) {
 			return token;

@@ -4,7 +4,9 @@
 
 class SExprObject {
 public:
-	bool isNull;
+	Token token;
+
+	SExprObject();
 
 	std::vector<SExprObject> children;
 };
