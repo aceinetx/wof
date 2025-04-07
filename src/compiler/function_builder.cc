@@ -19,13 +19,13 @@ bool Compiler::doFunction(SExprObject object) {
 		return false;
 	}
 
-	llvm::Type *retType = getTypeFromName(type.valueS);
+	Type *retType = getTypeFromName(type.valueS);
 	if (!retType) {
 		return false;
 	}
 
 	WofFunction function;
-	function.type = llvm::FunctionType::get(retType, false);
+	function.type = FunctionType::get(retType, false);
 	function.function = Function::Create(function.type, Function::ExternalLinkage, name.valueS, fmodule);
 	function.block = BasicBlock::Create(context, name.valueS + "b", function.function);
 
