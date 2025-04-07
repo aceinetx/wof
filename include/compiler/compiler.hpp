@@ -3,6 +3,14 @@
 #include <pch.hpp>
 #include <sexpr.hpp>
 
+typedef struct WofFunction {
+	llvm::Function *function;
+	llvm::BasicBlock *block;
+	llvm::FunctionType *type;
+
+	std::string name;
+} WofFunction;
+
 class Compiler {
 public:
 	llvm::LLVMContext context;
@@ -11,9 +19,15 @@ public:
 
 	SExpr sexpr;
 
+	std::map<std::string, WofFunction> functions;
+	std::map<std::string, llvm::Type *> types;
+
 public:
 	Compiler(std::string moduleName, Lexer &lexer);
 
+	void addBasicTypes();
+	llvm::Type *getTypeFromName(std::string name);
 	bool compile();
-	bool do_function(SExprObject object);
+	bool doFunction(SExprObject object);
+	bool doReturn(SExprObject object);
 };

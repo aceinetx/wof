@@ -6,10 +6,7 @@
 
 int main() {
 	std::string code = R"(
-(fun main () (
-  (return 0)
-))
-(fun test () (
+(fun i32 main () (
   (return)
 ))
 )";

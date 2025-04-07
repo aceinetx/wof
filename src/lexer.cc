@@ -78,6 +78,7 @@ Token Lexer::identifier() {
 	Token token = Token::create();
 
 	token.type = Token::IDENTIFIER;
+	token.line = line;
 
 	while (pos < code.length()) {
 		char &c = code.at(pos);
