@@ -10,7 +10,7 @@ int main() {
   (return 0)
 ))
 (fun i32 add () (
-	(return 69)
+	(return (* 23 3))
 ))
 )";
 

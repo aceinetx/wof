@@ -35,4 +35,5 @@ public:
 	bool doFunction(SExprObject object);
 	bool doReturn(SExprObject object);
 	bool doBody(SExprObject object);
+	llvm::Value *doExpr(SExprObject);
 };

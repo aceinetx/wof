@@ -22,7 +22,7 @@ SExprObject SExpr::next() {
 
 	token = lexer.next();
 	while (token.type != Token::RPAREN) {
-		if (token.type == Token::IDENTIFIER || token.type == Token::FLOATING || token.type == Token::INTEGER || token.type == Token::STRING) {
+		if (token.type == Token::IDENTIFIER || token.type == Token::FLOATING || token.type == Token::INTEGER || token.type == Token::STRING || token.type == Token::OPERATOR) {
 			SExprObject obj;
 
 			obj.token = token;
