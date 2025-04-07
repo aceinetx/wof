@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <format>
 #include <iostream>
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>

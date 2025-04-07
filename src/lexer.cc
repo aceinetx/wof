@@ -8,11 +8,13 @@ struct Token Token::create() {
 	token.valueC = 0;
 	token.valueI = 0;
 	token.valueF = 0.0f;
+	token.line = 0;
 	return token;
 }
 
 Lexer::Lexer(std::string code) : code(code) {
 	pos = 0;
+	line = 0;
 }
 
 bool Lexer::isDigit(char c) {
@@ -40,6 +42,7 @@ Token Lexer::number() {
 	unsigned int right_part_digits = 0;
 
 	token.type = Token::INTEGER;
+	token.line = line;
 
 	while (pos < code.length()) {
 		char &c = code.at(pos);
@@ -111,6 +114,8 @@ Token Lexer::next() {
 		} else if (c == ')') {
 			token.type = Token::RPAREN;
 			pos++;
+		} else if (c == '\n') {
+			line++;
 		}
 		// todo: strings
 

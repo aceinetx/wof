@@ -7,6 +7,7 @@ typedef struct Token {
 	char valueC;
 	int valueI;
 	double valueF;
+	unsigned int line;
 
 	static struct Token create();
 } Token;
@@ -17,7 +18,9 @@ private:
 
 public:
 	unsigned int pos;
+	unsigned int line;
 
+public:
 	Lexer(std::string code);
 
 	static bool isDigit(char c);

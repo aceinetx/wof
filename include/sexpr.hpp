@@ -7,6 +7,7 @@ public:
 	Token token;
 	std::vector<SExprObject> children;
 
+public:
 	SExprObject();
 };
 
