@@ -5,6 +5,7 @@ struct Token Token::create() {
 	Token token;
 	token.type = Token::UNKNOWN;
 	token.valueS = "";
+	token.valueC = 0;
 	token.valueI = 0;
 	token.valueF = 0.0f;
 	return token;
@@ -24,6 +25,10 @@ bool Lexer::isLetter(char c) {
 
 bool Lexer::isIdentifierChar(char c) {
 	return (isLetter(c) || c == '_');
+}
+
+bool Lexer::isOperator(char c) {
+	return (c == '+' || c == '-' || c == '*' || c == '/');
 }
 
 Token Lexer::number() {
@@ -96,6 +101,10 @@ Token Lexer::next() {
 			token = number();
 		} else if (isLetter(c)) {
 			token = identifier();
+		} else if (isOperator(c)) {
+			token.type = Token::OPERATOR;
+			token.valueC = c;
+			pos++;
 		} else if (c == '(') {
 			token.type = Token::LPAREN;
 			pos++;

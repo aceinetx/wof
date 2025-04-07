@@ -2,8 +2,9 @@
 #include <pch.hpp>
 
 typedef struct Token {
-	enum { UNKNOWN, END, LPAREN, RPAREN, IDENTIFIER, STRING, INTEGER, FLOATING } type;
+	enum { UNKNOWN, END, LPAREN, RPAREN, IDENTIFIER, STRING, INTEGER, FLOATING, SEXPR, OPERATOR } type;
 	std::string valueS;
+	char valueC;
 	int valueI;
 	double valueF;
 
@@ -22,6 +23,7 @@ public:
 	static bool isDigit(char c);
 	static bool isLetter(char c);
 	static bool isIdentifierChar(char c);
+	static bool isOperator(char c);
 
 	Token number();
 	Token identifier();
