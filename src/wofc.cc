@@ -6,8 +6,11 @@
 
 int main() {
 	std::string code = R"(
-(fun i32 main () (
-  (return)
+(fun i8 main () (
+  (return 0)
+))
+(fun i32 add () (
+	(return 69)
 ))
 )";
 

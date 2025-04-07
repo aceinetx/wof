@@ -83,7 +83,7 @@ Token Lexer::identifier() {
 	while (pos < code.length()) {
 		char &c = code.at(pos);
 
-		if (isIdentifierChar(c)) {
+		if (isIdentifierChar(c) || isDigit(c)) {
 			token.valueS.push_back(c);
 		} else {
 			break;

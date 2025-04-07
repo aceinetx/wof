@@ -22,12 +22,17 @@ public:
 	std::map<std::string, WofFunction> functions;
 	std::map<std::string, llvm::Type *> types;
 
+	std::string currentFunction;
+
 public:
 	Compiler(std::string moduleName, Lexer &lexer);
+
+	llvm::Value *castValue(llvm::Value *value, llvm::Type *targetType);
 
 	void addBasicTypes();
 	llvm::Type *getTypeFromName(std::string name);
 	bool compile();
 	bool doFunction(SExprObject object);
 	bool doReturn(SExprObject object);
+	bool doBody(SExprObject object);
 };

@@ -4,29 +4,39 @@
 using namespace llvm;
 
 bool Compiler::doFunction(SExprObject object) {
-	Token &name = object.children[1].token;
-	SExprObject &args = object.children[2];
-	SExprObject &body = object.children[3];
+	Token &type = object.children[1].token;
+	Token &name = object.children[2].token;
+	SExprObject &args = object.children[3];
+	SExprObject &body = object.children[4];
 
-	if (name.type != Token::IDENTIFIER) {
+	if (type.type != Token::IDENTIFIER) {
 		ERROR("[{}] Excepted a IDENTIFIER after fun", name.line);
 		return false;
 	}
 
+	if (name.type != Token::IDENTIFIER) {
+		ERROR("[{}] Excepted a IDENTIFIER after function name", name.line);
+		return false;
+	}
+
+	llvm::Type *retType = getTypeFromName(type.valueS);
+	if (!retType) {
+		return false;
+	}
+
 	WofFunction function;
-	function.type = llvm::FunctionType::get(builder.getVoidTy(), false);
+	function.type = llvm::FunctionType::get(retType, false);
 	function.function = Function::Create(function.type, Function::ExternalLinkage, name.valueS, fmodule);
 	function.block = BasicBlock::Create(context, name.valueS + "b", function.function);
 
+	currentFunction = name.valueS;
+
+	functions[name.valueS] = function;
+
 	builder.SetInsertPoint(function.block);
 
-	for (SExprObject &obj : body.children) {
-		if (obj.children.size() > 0) {
-			if (obj.children[0].token.valueS == "return") {
-				if (!doReturn(obj))
-					return false;
-			}
-		}
+	if (!doBody(body)) {
+		return false;
 	}
 
 	return true;

@@ -4,6 +4,7 @@
 using namespace llvm;
 
 Compiler::Compiler(std::string moduleName, Lexer &lexer) : builder(context), fmodule(moduleName, context), sexpr(lexer) {
+	addBasicTypes();
 }
 
 void Compiler::addBasicTypes() {
@@ -24,7 +25,7 @@ void Compiler::addBasicTypes() {
 }
 
 Type *Compiler::getTypeFromName(std::string name) {
-	if (!types.count(name)) {
+	if (!types.contains(name)) {
 		ERROR("Invalid type: {}", name);
 		return nullptr;
 	}
@@ -35,7 +36,7 @@ Type *Compiler::getTypeFromName(std::string name) {
 bool Compiler::compile() {
 	SExprObject object = sexpr.next();
 	while (object.token.type != Token::END) {
-		if (object.children.size() == 4) {
+		if (object.children.size() == 5) {
 			if (object.children[0].token.valueS == "fun") {
 				if (!doFunction(object))
 					return false;

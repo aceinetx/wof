@@ -5,11 +5,11 @@ using namespace llvm;
 
 bool Compiler::doReturn(SExprObject object) {
 	if (object.children.size() > 1) {
-		ERROR("return values is a todo");
-		return false;
+		Constant *cnst = ConstantInt::get(functions[currentFunction].type->getReturnType(), object.children[1].token.valueI);
+		builder.CreateRet(cnst);
+	} else {
+		builder.CreateRet(nullptr);
 	}
-
-	builder.CreateRet(nullptr);
 
 	return true;
 }
