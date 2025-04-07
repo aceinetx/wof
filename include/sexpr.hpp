@@ -5,10 +5,9 @@
 class SExprObject {
 public:
 	Token token;
+	std::vector<SExprObject> children;
 
 	SExprObject();
-
-	std::vector<SExprObject> children;
 };
 
 class SExpr {
