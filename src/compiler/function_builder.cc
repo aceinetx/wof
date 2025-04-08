@@ -75,6 +75,7 @@ bool Compiler::doFunction(SExprObject object) {
 		variable.value = arg;
 
 		functions[currentFunction].variables[variable.name] = variable;
+		functions[currentFunction].function->getArg(i)->setName(variable.name);
 
 		arg = fnArgs++;
 	}

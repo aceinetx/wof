@@ -3,6 +3,16 @@
 
 using namespace llvm;
 
+std::vector<llvm::Type *> getFunctionParameterTypes(llvm::Function *function) {
+	std::vector<llvm::Type *> paramTypes;
+
+	for (auto &arg : function->args()) {
+		paramTypes.push_back(arg.getType());
+	}
+
+	return paramTypes;
+}
+
 Value *Compiler::doExpr(SExprObject object) {
 	if (object.children.size() == 0) {
 		Type *type;
@@ -32,7 +42,10 @@ Value *Compiler::doExpr(SExprObject object) {
 				Value *left = doExpr(object.children[1]);
 				if (!left)
 					return nullptr;
-				Value *right = doExpr(object.children[2]);
+				Value *rightRaw = doExpr(object.children[2]);
+				if (!rightRaw)
+					return nullptr;
+				Value *right = castValue(rightRaw, left->getType());
 				if (!right)
 					return nullptr;
 
@@ -54,9 +67,33 @@ Value *Compiler::doExpr(SExprObject object) {
 				}
 
 				return res;
+			} else if (object.children[0].token.type == Token::IDENTIFIER) {
+				Token name = object.children[0].token;
+				if (!functions.contains(name.valueS)) {
+					ERROR("[{}] Undefined function", name.line);
+					return nullptr;
+				}
+				WofFunction &func = functions[name.valueS];
 
+				std::vector<Value *> args = {};
+				std::vector<Type *> argTypes = getFunctionParameterTypes(func.function);
+
+				for (int i = 1; i < object.children.size(); i++) {
+					Value *valueRaw = doExpr(object.children[i]);
+					if (!valueRaw) {
+						return nullptr;
+					}
+
+					Value *value = castValue(valueRaw, argTypes[i - 1]);
+					if (!value)
+						return nullptr;
+
+					args.push_back(value);
+				}
+
+				return builder.CreateCall(func.function, args);
 			} else {
-				ERROR("[{}] Excepted an operator", object.token.line);
+				ERROR("[{}] Excepted an operator or identifier", object.token.line);
 				return nullptr;
 			}
 		}
