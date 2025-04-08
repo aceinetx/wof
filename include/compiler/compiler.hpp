@@ -41,6 +41,6 @@ public:
 	bool compile();
 	bool doFunction(SExprObject object);
 	bool doReturn(SExprObject object);
-	bool doBody(SExprObject object);
+	bool doBlock(SExprObject object);
 	llvm::Value *doExpr(SExprObject);
 };

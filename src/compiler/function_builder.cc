@@ -80,7 +80,7 @@ bool Compiler::doFunction(SExprObject object) {
 		arg = fnArgs++;
 	}
 
-	if (!doBody(body)) {
+	if (!doBlock(body)) {
 		return false;
 	}
 
