@@ -4,8 +4,8 @@ S-Expression based programming language
 (fun i8 main () (
 	(return 0)
 ))
-(fun i32 add () (
-	(return (* 23 3))
+(fun i32 add ((i32 a) (i32 b)) (
+	(return (+ a b))
 ))
 ```
 The syntax is extremely similar to lisp, but unlike lisp, wof is compiled, statically typed and doesn't use as much dashes as lisp does
