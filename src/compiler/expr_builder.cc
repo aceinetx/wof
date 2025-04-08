@@ -32,6 +32,10 @@ Value *Compiler::doExpr(SExprObject object) {
 				return nullptr;
 			}
 			return func.variables[object.token.valueS].value;
+		} else if (object.token.type == Token::STRING) {
+			Value *value = builder.CreateGlobalString(object.token.valueS);
+
+			return value;
 		} else {
 			ERROR("[{}] Invalid one-constant value type", object.token.line);
 			return nullptr;

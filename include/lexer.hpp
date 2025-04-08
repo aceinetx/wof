@@ -30,6 +30,7 @@ public:
 
 	Token number();
 	Token identifier();
+	Token str();
 
 	Token next();
 };

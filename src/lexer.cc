@@ -95,6 +95,29 @@ Token Lexer::identifier() {
 	return token;
 }
 
+Token Lexer::str() {
+	Token token = Token::create();
+
+	token.type = Token::STRING;
+	token.line = line;
+
+	pos++;
+	while (pos < code.length()) {
+		char &c = code.at(pos);
+
+		if (c == '"') {
+			pos++;
+			break;
+		} else {
+			token.valueS.push_back(c);
+		}
+
+		pos++;
+	}
+
+	return token;
+}
+
 Token Lexer::next() {
 	Token token = Token::create();
 	while (pos < code.length()) {
@@ -105,6 +128,8 @@ Token Lexer::next() {
 			token = number();
 		} else if (isLetter(c)) {
 			token = identifier();
+		} else if (c == '"') {
+			token = str();
 		} else if (isOperator(c)) {
 			token.type = Token::OPERATOR;
 			token.valueC = c;
@@ -118,7 +143,6 @@ Token Lexer::next() {
 		} else if (c == '\n') {
 			line++;
 		}
-		// todo: strings
 
 		if (token.type != Token::UNKNOWN) {
 			return token;
