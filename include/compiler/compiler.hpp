@@ -5,6 +5,7 @@
 
 typedef struct WofVariable {
 	llvm::Value *value;
+	llvm::Type *type;
 	std::string name;
 } WofVariable;
 
@@ -42,5 +43,7 @@ public:
 	bool doFunction(SExprObject object);
 	bool doReturn(SExprObject object);
 	bool doBlock(SExprObject object);
+	bool doVar(SExprObject object);
+	bool doAssign(SExprObject object);
 	llvm::Value *doExpr(SExprObject);
 };

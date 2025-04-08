@@ -70,13 +70,17 @@ bool Compiler::doFunction(SExprObject object) {
 	auto fnArgs = function.function->arg_begin();
 	Value *arg = fnArgs++;
 	for (int i = 0; i < argNames.size(); i++) {
-		WofVariable variable;
-		variable.name = argNames[i];
-		variable.value = arg;
+		std::string argName = argNames.at(i);
+		Type *argType = argTypes.at(i);
+		Value *var = builder.CreateAlloca(argType);
+		builder.CreateStore(arg, var);
 
-		functions[currentFunction].variables[variable.name] = variable;
-		functions[currentFunction].function->getArg(i)->setName(variable.name);
+		WofVariable wofVar;
+		wofVar.value = var;
+		wofVar.type = argType;
+		wofVar.name = argName;
 
+		functions[currentFunction].variables[argName] = wofVar;
 		arg = fnArgs++;
 	}
 

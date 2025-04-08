@@ -6,11 +6,16 @@
 
 int main() {
 	std::string code = R"(
-(fun i64 f () (
-  (return "Hello, World!")
-))
 (fun i32 main ((i32 argc)) (
-	(return 0)
+	(var i32 x)
+	(var i32 y)
+	(var i32 z)
+
+	(assign x 23)
+	(assign y 3)
+	(assign z (* x y))
+
+	(return z)
 ))
 )";
 

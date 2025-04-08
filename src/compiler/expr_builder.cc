@@ -31,7 +31,9 @@ Value *Compiler::doExpr(SExprObject object) {
 				ERROR("[{}] Undefined variable", object.token.line);
 				return nullptr;
 			}
-			return func.variables[object.token.valueS].value;
+			WofVariable &var = func.variables[object.token.valueS];
+			Value *value = builder.CreateLoad(var.type, var.value);
+			return value;
 		} else if (object.token.type == Token::STRING) {
 			Value *value = builder.CreateGlobalString(object.token.valueS);
 
