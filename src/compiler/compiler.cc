@@ -1,9 +1,21 @@
 #include <compiler/compiler.hpp>
+#include <llvm/IR/LegacyPassManager.h>
+#include <llvm/Support/CodeGen.h>
+#include <llvm/Support/FileSystem.h>
+#include <llvm/Support/raw_ostream.h>
+#include <llvm/TargetParser/Host.h>
 #include <log.hpp>
 
 using namespace llvm;
 
 Compiler::Compiler(std::string moduleName, Lexer &lexer) : builder(context), fmodule(moduleName, context), sexpr(lexer) {
+	InitializeNativeTarget();
+	InitializeAllTargetInfos();
+	InitializeAllTargets();
+	InitializeAllTargetMCs();
+	InitializeAllAsmParsers();
+	InitializeAllAsmPrinters();
+
 	addBasicTypes();
 }
 
@@ -47,9 +59,65 @@ bool Compiler::compile() {
 
 	verifyModule(fmodule);
 
-	std::error_code EC;
-	raw_fd_ostream dest(STDOUT_FILENO, false);
-	fmodule.print(dest, nullptr);
+	return true;
+}
 
+bool Compiler::emitObject(std::string output) {
+	std::string targetTriple = sys::getDefaultTargetTriple();
+
+	std::string error;
+	auto target = TargetRegistry::lookupTarget(targetTriple, error);
+	if (!target) {
+		ERROR("target lookup error: {}", error);
+		return false;
+	}
+
+	auto cpu = "generic";
+	auto features = "";
+
+	TargetOptions opt;
+	auto targetMachine = target->createTargetMachine(targetTriple, cpu, features, opt, Reloc::PIC_);
+
+	fmodule.setDataLayout(targetMachine->createDataLayout());
+	fmodule.setTargetTriple(targetTriple);
+
+	std::error_code EC;
+	raw_fd_ostream dest(output, EC, sys::fs::OF_None);
+	if (EC) {
+		ERROR("could not open output file: {}", EC.message());
+		return false;
+	}
+
+	legacy::PassManager pass;
+	auto fileType = CodeGenFileType::ObjectFile;
+	if (targetMachine->addPassesToEmitFile(pass, dest, nullptr, fileType)) {
+		ERROR("TargetMachine can't emit a file of this type");
+		return false;
+	}
+
+	pass.run(fmodule);
+	dest.flush();
+
+	return true;
+}
+
+bool Compiler::smartEmit(std::string output) {
+	if (!output.ends_with(".ll") || output.ends_with(".o")) { // compile object
+		bool status = emitObject(output);
+		if (status) {
+			INFO("emitted object code to {}", output);
+		}
+		return status;
+	} else { // emit ir
+		std::error_code EC;
+		raw_fd_ostream dest(output, EC, sys::fs::OF_None);
+		if (EC) {
+			ERROR("could not open output file: {}", EC.message());
+			return false;
+		}
+
+		fmodule.print(dest, nullptr);
+		INFO("emitted ir code to {}", output);
+	}
 	return true;
 }

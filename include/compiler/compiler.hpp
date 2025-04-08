@@ -39,7 +39,11 @@ public:
 
 	void addBasicTypes();
 	llvm::Type *getTypeFromName(std::string name);
+
 	bool compile();
+	bool emitObject(std::string output);
+	bool smartEmit(std::string output);
+
 	bool doFunction(SExprObject object);
 	bool doReturn(SExprObject object);
 	bool doBlock(SExprObject object);
