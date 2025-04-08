@@ -68,7 +68,7 @@ Value *Compiler::doExpr(SExprObject object) {
 					res = builder.CreateMul(left, right);
 					break;
 				case '/':
-					ERROR("[{}] Division is a TODO", object.token.line);
+					res = builder.CreateSDiv(left, right);
 					break;
 				}
 
