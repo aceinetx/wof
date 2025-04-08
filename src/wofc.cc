@@ -44,6 +44,7 @@ options:
 
 	if (sources.empty()) {
 		ERROR("no sources provided");
+		return 1;
 	}
 
 	for (std::string &source : sources) {
