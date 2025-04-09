@@ -64,6 +64,7 @@ bool Compiler::doFunction(SExprObject object) {
 	function.type = FunctionType::get(retType, argTypes, false);
 	function.function = Function::Create(function.type, Function::ExternalLinkage, name.valueS, fmodule);
 	function.block = BasicBlock::Create(context, name.valueS + "b", function.function);
+	function.name = name.valueS;
 
 	currentFunction = name.valueS;
 
@@ -90,6 +91,11 @@ bool Compiler::doFunction(SExprObject object) {
 	}
 
 	if (!doBlock(body)) {
+		return false;
+	}
+
+	if (!functions[currentFunction].block->getTerminator()) {
+		ERROR("[{}] {} doesn't return", name.line, functions[currentFunction].name);
 		return false;
 	}
 
