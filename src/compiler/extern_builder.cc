@@ -6,10 +6,12 @@ using namespace llvm;
 bool Compiler::doExtern(SExprObject object) {
 	if (object.children.size() < 3) {
 		ERROR("[{}] Extern should have at least 3 operands", object.children[0].token.line);
+		return false;
 	}
 	for (SExprObject &obj : object.children) {
 		if (obj.token.type != Token::IDENTIFIER) {
 			ERROR("[{}] Everything in extern should be an identifier", object.children[0].token.line);
+			return false;
 		}
 	}
 

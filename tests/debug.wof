@@ -1,0 +1,10 @@
+"This file is used as an argument for debugging"
+
+(extern i32 getkey)
+
+(fun i32 main () (
+	(var i32 x)
+	(assign x (getkey))
+	
+	(return 0)
+))

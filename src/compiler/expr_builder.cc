@@ -86,7 +86,7 @@ Value *Compiler::doExpr(SExprObject object) {
 			}
 
 			if (!func) {
-				ERROR("[{}] Undefined function", name.line);
+				ERROR("[{}] Undefined function: {}", name.line, name.valueS);
 				return nullptr;
 			}
 
