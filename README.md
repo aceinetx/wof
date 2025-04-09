@@ -1,11 +1,16 @@
 # wof
 S-Expression based programming language 
 ```lisp
-(fun i8 main () (
-	(return 0)
-))
+(extern i32 printf ptr vararg)
+
 (fun i32 add ((i32 a) (i32 b)) (
 	(return (+ a b))
+))
+
+(fun i32 main () (
+	(printf "One & one make %d!\n" (add 1 1))
+
+	(return 0)
 ))
 ```
 The syntax is extremely similar to lisp, but unlike lisp, wof is compiled, statically typed and doesn't use as much dashes as lisp does

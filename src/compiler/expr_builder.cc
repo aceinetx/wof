@@ -39,7 +39,7 @@ Value *Compiler::doExpr(SExprObject object) {
 
 			return value;
 		} else {
-			ERROR("[{}] Invalid one-constant value type", object.token.line);
+			ERROR("[{}] Invalid one-constant value type ({})", object.token.line, (int)object.token.type);
 			return nullptr;
 		}
 	} else {
@@ -99,7 +99,10 @@ Value *Compiler::doExpr(SExprObject object) {
 					return nullptr;
 				}
 
-				Value *value = castValue(valueRaw, argTypes[i - 1]);
+				Value *value = valueRaw;
+				if (i <= func->getFunctionType()->getNumParams()) {
+					value = castValue(valueRaw, argTypes[i - 1]);
+				}
 				if (!value)
 					return nullptr;
 

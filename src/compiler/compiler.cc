@@ -34,6 +34,7 @@ void Compiler::addBasicTypes() {
 	types["f64"] = builder.getDoubleTy();
 
 	types["u0"] = builder.getVoidTy();
+	types["ptr"] = PointerType::get(builder.getVoidTy(), 0);
 }
 
 Type *Compiler::getTypeFromName(std::string name) {

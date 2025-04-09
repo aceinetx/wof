@@ -30,6 +30,7 @@ SExprObject SExpr::next() {
 		} else if (token.type == Token::LPAREN) {
 			lexer.pos--;
 			SExprObject obj = next();
+			obj.token.line = token.line;
 
 			object.children.push_back(obj);
 		}
