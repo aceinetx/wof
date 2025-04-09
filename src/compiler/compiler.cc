@@ -54,7 +54,8 @@ bool Compiler::compile() {
 				if (!doFunction(object))
 					return false;
 			}
-		} else if (object.children.size() > 0) {
+		}
+		if (object.children.size() > 0) {
 			if (object.children[0].token.valueS == "extern") {
 				if (!doExtern(object))
 					return false;
