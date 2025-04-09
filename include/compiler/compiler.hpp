@@ -49,5 +49,6 @@ public:
 	bool doBlock(SExprObject object);
 	bool doVar(SExprObject object);
 	bool doAssign(SExprObject object);
+	bool doExtern(SExprObject object);
 	llvm::Value *doExpr(SExprObject);
 };

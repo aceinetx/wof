@@ -1,5 +1,5 @@
-#include <cstdlib>
 #include <lexer.hpp>
+#include <util.hpp>
 
 struct Token Token::create() {
 	Token token;
@@ -130,6 +130,8 @@ Token Lexer::next() {
 			token = identifier();
 		} else if (c == '"') {
 			token = str();
+			replace(token.valueS, "\\n", "\n");
+			replace(token.valueS, "\\r", "\r");
 		} else if (isOperator(c)) {
 			token.type = Token::OPERATOR;
 			token.valueC = c;

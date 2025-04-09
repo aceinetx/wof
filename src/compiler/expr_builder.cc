@@ -73,35 +73,40 @@ Value *Compiler::doExpr(SExprObject object) {
 				}
 
 				return res;
-			} else if (object.children[0].token.type == Token::IDENTIFIER) {
-				Token name = object.children[0].token;
-				if (!functions.contains(name.valueS)) {
-					ERROR("[{}] Undefined function", name.line);
-					return nullptr;
-				}
-				WofFunction &func = functions[name.valueS];
+			}
+		}
 
-				std::vector<Value *> args = {};
-				std::vector<Type *> argTypes = getFunctionParameterTypes(func.function);
-
-				for (int i = 1; i < object.children.size(); i++) {
-					Value *valueRaw = doExpr(object.children[i]);
-					if (!valueRaw) {
-						return nullptr;
-					}
-
-					Value *value = castValue(valueRaw, argTypes[i - 1]);
-					if (!value)
-						return nullptr;
-
-					args.push_back(value);
-				}
-
-				return builder.CreateCall(func.function, args);
+		if (object.children[0].token.type == Token::IDENTIFIER) {
+			Token name = object.children[0].token;
+			Function *func;
+			if (functions.contains(name.valueS)) {
+				func = functions[name.valueS].function;
 			} else {
-				ERROR("[{}] Excepted an operator or identifier", object.token.line);
+				func = fmodule.getFunction(name.valueS);
+			}
+
+			if (!func) {
+				ERROR("[{}] Undefined function", name.line);
 				return nullptr;
 			}
+
+			std::vector<Value *> args = {};
+			std::vector<Type *> argTypes = getFunctionParameterTypes(func);
+
+			for (int i = 1; i < object.children.size(); i++) {
+				Value *valueRaw = doExpr(object.children[i]);
+				if (!valueRaw) {
+					return nullptr;
+				}
+
+				Value *value = castValue(valueRaw, argTypes[i - 1]);
+				if (!value)
+					return nullptr;
+
+				args.push_back(value);
+			}
+
+			return builder.CreateCall(func, args);
 		}
 	}
 
