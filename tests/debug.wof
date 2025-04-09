@@ -1,13 +1,10 @@
 "This file is used as an argument for debugging"
 
-(extern i32 getchar)
 (extern i32 printf ptr vararg)
 
 (fun i32 main () (
   (var i32 x)
-  (assign x (getchar))
+  (assign x (== 1 1))
 
-  (printf "You pressed %c\n" x);
-
-	(return 0)
+	(return x)
 ))

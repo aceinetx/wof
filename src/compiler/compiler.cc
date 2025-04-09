@@ -49,14 +49,11 @@ Type *Compiler::getTypeFromName(std::string name) {
 bool Compiler::compile() {
 	SExprObject object = sexpr.next();
 	while (object.token.type != Token::END) {
-		if (object.children.size() == 5) {
+		if (object.children.size() > 0) {
 			if (object.children[0].token.valueS == "fun") {
 				if (!doFunction(object))
 					return false;
-			}
-		}
-		if (object.children.size() > 0) {
-			if (object.children[0].token.valueS == "extern") {
+			} else if (object.children[0].token.valueS == "extern") {
 				if (!doExtern(object))
 					return false;
 			}

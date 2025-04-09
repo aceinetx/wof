@@ -134,7 +134,15 @@ Token Lexer::next() {
 			replace(token.valueS, "\\r", "\r");
 		} else if (isOperator(c)) {
 			token.type = Token::OPERATOR;
-			token.valueC = c;
+			token.valueS = c;
+			pos++;
+		} else if (c == '=') {
+			token.type = Token::OPERATOR;
+			token.valueS = c;
+			if (pos + 1 < code.size() && code[pos + 1] == '=') {
+				token.valueS = "==";
+				pos++;
+			}
 			pos++;
 		} else if (c == '(') {
 			token.type = Token::LPAREN;

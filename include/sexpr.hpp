@@ -4,6 +4,7 @@
 
 class SExprObject {
 public:
+	unsigned int line;
 	Token token;
 	std::vector<SExprObject> children;
 

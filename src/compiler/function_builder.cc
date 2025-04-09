@@ -4,6 +4,11 @@
 using namespace llvm;
 
 bool Compiler::doFunction(SExprObject object) {
+	if (object.children.size() < 5) {
+		ERROR("[{}] Not enough operands for fun", object.line);
+		return false;
+	}
+
 	Token &type = object.children[1].token;
 	Token &name = object.children[2].token;
 	SExprObject &args = object.children[3];

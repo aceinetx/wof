@@ -57,19 +57,19 @@ Value *Compiler::doExpr(SExprObject object) {
 
 				Value *res = nullptr;
 
-				switch (object.children[0].token.valueC) {
-				case '+':
+				std::string op = object.children[0].token.valueS;
+				if (op == "+") {
 					res = builder.CreateAdd(left, right);
-					break;
-				case '-':
+				} else if (op == "-") {
 					res = builder.CreateSub(left, right);
-					break;
-				case '*':
+				} else if (op == "*") {
 					res = builder.CreateMul(left, right);
-					break;
-				case '/':
+				} else if (op == "/") {
 					res = builder.CreateSDiv(left, right);
-					break;
+				} else if (op == "==") {
+					res = builder.CreateICmpEQ(left, right);
+				} else {
+					ERROR("[{}] Invalid operator: {}", object.children[0].token.line, op);
 				}
 
 				return res;
