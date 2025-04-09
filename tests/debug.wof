@@ -5,6 +5,6 @@
 (fun i32 main () (
 	(var i32 x)
 	(assign x (getchar))
-
+	
 	(return 0)
 ))
