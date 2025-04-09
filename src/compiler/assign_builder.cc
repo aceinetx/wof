@@ -4,6 +4,11 @@
 using namespace llvm;
 
 bool Compiler::doAssign(SExprObject object) {
+	if (object.children.size() < 3) {
+		ERROR("[{}] Assign should have at least 3 operands", object.line);
+		return false;
+	}
+
 	Token &name = object.children[1].token;
 	SExprObject &expr = object.children[2];
 

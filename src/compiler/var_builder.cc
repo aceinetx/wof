@@ -4,6 +4,11 @@
 using namespace llvm;
 
 bool Compiler::doVar(SExprObject object) {
+	if (object.children.size() == 3) {
+		ERROR("[{}] Var should have 3 operands", object.line);
+		return false;
+	}
+
 	Token &type = object.children[1].token;
 	Token &name = object.children[2].token;
 
