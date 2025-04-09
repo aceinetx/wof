@@ -17,6 +17,8 @@ Compiler::Compiler(std::string moduleName, Lexer &lexer) : builder(context), fmo
 	InitializeAllAsmPrinters();
 
 	addBasicTypes();
+
+	ifID = 0;
 }
 
 void Compiler::addBasicTypes() {

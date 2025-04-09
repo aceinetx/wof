@@ -19,6 +19,22 @@ bool Compiler::doBlock(SExprObject object) {
 				if (!doReturn(obj))
 					return false;
 				success = true;
+			} else if (obj.children[0].token.valueS == "if") {
+				if (!doIf(obj))
+					return false;
+				success = true;
+			} else if (obj.children[0].token.valueS == "else") {
+				if (!doElse(obj))
+					return false;
+				success = true;
+			} else if (obj.children[0].token.valueS == "elif") {
+				if (!doElif(obj))
+					return false;
+				success = true;
+			} else if (obj.children[0].token.valueS == "endif") {
+				if (!doEndif(obj))
+					return false;
+				success = true;
 			}
 
 			if (!success) {

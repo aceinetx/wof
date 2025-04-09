@@ -4,7 +4,7 @@
 using namespace llvm;
 
 bool Compiler::doVar(SExprObject object) {
-	if (object.children.size() == 3) {
+	if (object.children.size() != 3) {
 		ERROR("[{}] Var should have 3 operands", object.line);
 		return false;
 	}

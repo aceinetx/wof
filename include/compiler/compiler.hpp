@@ -9,6 +9,13 @@ typedef struct WofVariable {
 	std::string name;
 } WofVariable;
 
+typedef struct WofIfStatement {
+	llvm::BasicBlock *trueBlock;
+	llvm::BasicBlock *falseBlock;
+	llvm::BasicBlock *mergeBlock;
+	bool elif;
+} WofIfStatement;
+
 typedef struct WofFunction {
 	llvm::Function *function;
 	llvm::BasicBlock *block;
@@ -17,6 +24,7 @@ typedef struct WofFunction {
 	std::string name;
 
 	std::map<std::string, WofVariable> variables;
+	std::stack<WofIfStatement> ifStatements;
 } WofFunction;
 
 class Compiler {
@@ -29,6 +37,8 @@ public:
 
 	std::map<std::string, WofFunction> functions;
 	std::map<std::string, llvm::Type *> types;
+
+	unsigned int ifID;
 
 	std::string currentFunction;
 
@@ -47,8 +57,16 @@ public:
 	bool doFunction(SExprObject object);
 	bool doReturn(SExprObject object);
 	bool doBlock(SExprObject object);
+
 	bool doVar(SExprObject object);
 	bool doAssign(SExprObject object);
+
 	bool doExtern(SExprObject object);
+
+	bool doIf(SExprObject object);
+	bool doElse(SExprObject object);
+	bool doElif(SExprObject object);
+	bool doEndif(SExprObject object);
+
 	llvm::Value *doExpr(SExprObject);
 };
