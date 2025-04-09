@@ -68,6 +68,16 @@ Value *Compiler::doExpr(SExprObject object) {
 					res = builder.CreateSDiv(left, right);
 				} else if (op == "==") {
 					res = builder.CreateICmpEQ(left, right);
+				} else if (op == "!=") {
+					res = builder.CreateICmpNE(left, right);
+				} else if (op == ">") {
+					res = builder.CreateICmpSGT(left, right);
+				} else if (op == "<") {
+					res = builder.CreateICmpSLT(left, right);
+				} else if (op == ">=") {
+					res = builder.CreateICmpSGE(left, right);
+				} else if (op == "<=") {
+					res = builder.CreateICmpSLE(left, right);
 				} else {
 					ERROR("[{}] Invalid operator: {}", object.children[0].token.line, op);
 				}

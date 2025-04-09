@@ -136,6 +136,30 @@ Token Lexer::next() {
 			token.type = Token::OPERATOR;
 			token.valueS = c;
 			pos++;
+		} else if (c == '!') {
+			token.type = Token::OPERATOR;
+			token.valueS = c;
+			if (pos + 1 < code.size() && code[pos + 1] == '=') {
+				token.valueS = "!=";
+				pos++;
+			}
+			pos++;
+		} else if (c == '<') {
+			token.type = Token::OPERATOR;
+			token.valueS = c;
+			if (pos + 1 < code.size() && code[pos + 1] == '=') {
+				token.valueS = "<=";
+				pos++;
+			}
+			pos++;
+		} else if (c == '>') {
+			token.type = Token::OPERATOR;
+			token.valueS = c;
+			if (pos + 1 < code.size() && code[pos + 1] == '=') {
+				token.valueS = ">=";
+				pos++;
+			}
+			pos++;
 		} else if (c == '=') {
 			token.type = Token::OPERATOR;
 			token.valueS = c;
