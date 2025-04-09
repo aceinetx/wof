@@ -37,6 +37,7 @@ bool Compiler::doBlock(SExprObject object) {
 				success = true;
 			}
 
+			// If nothing above matches, maybe it's a raw expression or a function call
 			if (!success) {
 				if (!doExpr(obj))
 					return false;

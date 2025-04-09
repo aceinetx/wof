@@ -14,15 +14,13 @@ std::vector<llvm::Type *> getFunctionParameterTypes(llvm::Function *function) {
 }
 
 Value *Compiler::doExpr(SExprObject object) {
-	if (object.children.size() == 0) {
-		Type *type;
-		Constant *cnst;
+	if (object.children.size() == 0) { // If it's an argument to an existing expression
 		if (object.token.type == Token::INTEGER) {
-			type = builder.getInt64Ty();
+			Type *type = builder.getInt64Ty();
 			Constant *cnst = ConstantInt::get(type, object.token.valueI);
 			return cnst;
 		} else if (object.token.type == Token::FLOATING) {
-			type = builder.getDoubleTy();
+			Type *type = builder.getDoubleTy();
 			Constant *cnst = ConstantFP::get(type, object.token.valueF);
 			return cnst;
 		} else if (object.token.type == Token::IDENTIFIER) {
@@ -32,11 +30,13 @@ Value *Compiler::doExpr(SExprObject object) {
 				return nullptr;
 			}
 			WofVariable &var = func.variables[object.token.valueS];
+
+			// Load the variable and return it's value
 			Value *value = builder.CreateLoad(var.type, var.value);
 			return value;
 		} else if (object.token.type == Token::STRING) {
+			// Create a constant string and return it's address
 			Value *value = builder.CreateGlobalString(object.token.valueS);
-
 			return value;
 		} else {
 			ERROR("[{}] Invalid one-constant value type ({})", object.token.line, (int)object.token.type);
@@ -92,7 +92,7 @@ Value *Compiler::doExpr(SExprObject object) {
 			if (functions.contains(name.valueS)) {
 				func = functions[name.valueS].function;
 			} else {
-				func = fmodule.getFunction(name.valueS);
+				func = fmodule.getFunction(name.valueS); // Fallback to this if a function doesn't exist in wof's registry (for example, when externed)
 			}
 
 			if (!func) {
@@ -111,6 +111,7 @@ Value *Compiler::doExpr(SExprObject object) {
 
 				Value *value = valueRaw;
 				if (i <= func->getFunctionType()->getNumParams()) {
+					// If the argument is not in vararg zone, then cast it to the needed type
 					value = castValue(valueRaw, argTypes[i - 1]);
 				}
 				if (!value)

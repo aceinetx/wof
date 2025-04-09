@@ -12,9 +12,11 @@ SExprObject SExpr::next() {
 	object.line = 0;
 
 	Token token = lexer.next();
+	// Skip everything until '(' is encountered
 	while (token.type != Token::LPAREN) {
 		token = lexer.next();
 		if (token.type == Token::END) {
+			// Didn't encounter shit, return an empty object
 			object.token.type = Token::END;
 			object.line = token.line;
 
@@ -23,6 +25,8 @@ SExprObject SExpr::next() {
 	}
 
 	token = lexer.next();
+
+	// Iterate through the object's children, appending them to the vector
 	while (token.type != Token::RPAREN) {
 		if (token.type == Token::IDENTIFIER || token.type == Token::FLOATING || token.type == Token::INTEGER || token.type == Token::STRING || token.type == Token::OPERATOR) {
 			SExprObject obj;
