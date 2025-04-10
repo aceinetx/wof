@@ -1,21 +1,19 @@
-"This file is used as an argument for debugging"
+"This file is used for debugging with the vscode launch.json"
 
 (extern i32 printf ptr vararg)
 
+(struct Point (
+	(var public i32 x)
+	(var public i32 y)
+))
+
 (fun i32 main () (
-	(if (== 3 2) (
-		(printf "3 == 2 (for some reason)\n")
-	))
-	(elif (> 3 2) (
-		(printf "3 > 2\n")
-	))
-	(elif (== 1 1) (
-		(printf "1 == 1\n")
-	))
-	(else (
-		(printf "None of them are correct\n")
-	))
-	(endif)
+	(var Point point)
+
+	(assign point_x 69)
+	(assign point_y 42)
+
+	(printf "%d %d\n" point_x point_y)
 
 	(return 0)
 ))

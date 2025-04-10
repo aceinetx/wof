@@ -19,7 +19,12 @@ bool Compiler::doAssign(SExprObject object) {
 
 	WofVariable &var = functions[currentFunction].variables[name.valueS];
 
-	Value *value = doExpr(expr);
+	Value *valueRaw = doExpr(expr);
+	if (!valueRaw) {
+		return false;
+	}
+
+	Value *value = castValue(valueRaw, var.type);
 	if (!value) {
 		return false;
 	}
