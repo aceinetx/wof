@@ -6,7 +6,7 @@
 
 typedef struct WofVariable {
 	llvm::Value *value;
-	llvm::Type *type;
+	wtype type;
 	std::string name;
 } WofVariable;
 
@@ -53,7 +53,7 @@ public:
 
 	std::map<std::string, WofFunction> functions;
 	std::map<std::string, WofStruct> structs;
-	std::map<std::string, llvm::Type *> types;
+	std::map<std::string, wtype> types;
 
 	unsigned int ifID;
 	unsigned int whileID;

@@ -1,13 +1,20 @@
 #include <compiler/compiler.hpp>
-#include <llvm/IR/DerivedTypes.h>
-#include <llvm/IR/LegacyPassManager.h>
-#include <llvm/Support/CodeGen.h>
-#include <llvm/Support/FileSystem.h>
-#include <llvm/Support/raw_ostream.h>
-#include <llvm/TargetParser/Host.h>
 #include <log.hpp>
+#include <util.hpp>
 
 using namespace llvm;
+
+static unsigned int countLeadingUnderscores(const std::string &str) {
+	unsigned int count = 0;
+	for (char ch : str) {
+		if (ch == '_') {
+			++count;
+		} else {
+			break;
+		}
+	}
+	return count;
+}
 
 Compiler::Compiler(std::string moduleName, Lexer &lexer) : builder(context), fmodule(moduleName, context), sexpr(lexer) {
 	InitializeNativeTarget();
@@ -61,22 +68,24 @@ void Compiler::addAdvancedTypes() {
 
 wtype Compiler::getTypeFromName(std::string name) {
 	wtype type;
+	std::string cleanName = name;
+	replace(cleanName, "_", "");
 
 	for (auto &[structName, strukt] : structs) {
-		if (structName == name) {
+		if (structName == cleanName) {
 			type.type = strukt.type;
 		}
 	}
 
-	if (!types.contains(name)) {
-		ERROR("Invalid type: {}", name);
+	if (!types.contains(cleanName)) {
+		ERROR("Invalid type: {}", cleanName);
 		return nullptr;
 	}
 
-	type.type = types[name];
+	type.type = types[cleanName];
 
 	if (name.starts_with('_')) {
-		type.pointCount = name.find_last_not_of("_");
+		type.pointCount = countLeadingUnderscores(name);
 		type.pointee = type.type;
 		for (unsigned int i = 0; i < type.pointCount; i++) {
 			type.type = PointerType::get(type.type, 0);

@@ -126,7 +126,7 @@ Token Lexer::next() {
 
 		if (isDigit(c)) {
 			token = number();
-		} else if (isLetter(c)) {
+		} else if (isLetter(c) || c == '_') {
 			token = identifier();
 		} else if (c == '"') {
 			token = str();

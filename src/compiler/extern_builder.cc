@@ -15,8 +15,8 @@ bool Compiler::doExtern(SExprObject object) {
 		}
 	}
 
-	Type *retType = getTypeFromName(object.children[1].token.valueS);
-	if (!retType)
+	wtype retType = getTypeFromName(object.children[1].token.valueS);
+	if (!retType.type)
 		return false;
 	Token name = object.children[2].token;
 	std::vector<Type *> argTypes;
