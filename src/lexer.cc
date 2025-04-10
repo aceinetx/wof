@@ -26,7 +26,7 @@ bool Lexer::isLetter(char c) {
 }
 
 bool Lexer::isIdentifierChar(char c) {
-	return (isLetter(c) || c == '_');
+	return (isLetter(c) || c == '_' || c == '-');
 }
 
 bool Lexer::isOperator(char c) {
