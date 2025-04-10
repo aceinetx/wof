@@ -29,22 +29,23 @@ bool Compiler::doStructVar(SExprObject object, WofStruct &struc) {
 		return false;
 	}
 
-	std::map<std::string, llvm::Type *> *fields = &struc.privateFields;
-
-	if (access.valueS == "public") {
-		fields = &struc.publicFields;
-	} else if (access.valueS != "private") {
-		ERROR("[{}] No such access modifier", line);
-		return false;
-	}
-
 	Type *llvmVarType = getTypeFromName(type.valueS);
 	if (!llvmVarType) {
 		ERROR("[{}] no such type for struct var", line);
 		return false;
 	}
 
-	(*fields)[varName.valueS] = llvmVarType;
+	struc.fieldNames.push_back(varName.valueS);
+	struc.fieldTypes.push_back(llvmVarType);
+
+	if (access.valueS != "private" && access.valueS != "public") {
+		ERROR("[{}] No such access modifier", line);
+		return false;
+	}
+
+	if (access.valueS == "private") {
+		struc.privateFields.push_back(varName.valueS);
+	}
 
 	return true;
 }
@@ -70,15 +71,17 @@ bool Compiler::doStruct(SExprObject object) {
 
 	structs[name.token.valueS] = (WofStruct){};
 	WofStruct &struc = structs[name.token.valueS];
+	struc.name = name.token.valueS;
 
-	for (SExprObject &obj : object.children) {
+	for (SExprObject &obj : block.children) {
 		if (obj.children.size() > 0) {
 			if (obj.children[0].token.valueS == "var") {
 				doStructVar(obj, struc);
 			}
 		}
 	}
-	struc.type = StructType::create(context);
+
+	struc.type = StructType::create(context, struc.fieldTypes, struc.name);
 
 	return true;
 }

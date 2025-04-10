@@ -27,12 +27,34 @@ bool Compiler::doVar(SExprObject object) {
 		return false;
 	}
 
+	WofStruct *strukt = nullptr;
+	for (auto &[structName, _strukt] : structs) {
+		if (_strukt.type == varType) {
+			strukt = &_strukt;
+		}
+	}
+
 	WofVariable var;
 	var.value = builder.CreateAlloca(varType, nullptr, name.valueS);
 	var.name = name.valueS;
 	var.type = varType;
-
 	functions[currentFunction].variables[name.valueS] = var;
+
+	if (strukt) {
+
+		for (int i = 0; i < strukt->fieldTypes.size(); i++) {
+			std::string fieldName = var.name + "_" + strukt->fieldNames[i];
+			if (std::count(strukt->privateFields.begin(), strukt->privateFields.end(), strukt->fieldNames[i]) > 0) {
+				continue;
+			}
+
+			WofVariable sv;
+			sv.value = builder.CreateStructGEP(strukt->type, var.value, i, fieldName);
+			sv.name = fieldName;
+			sv.type = strukt->fieldTypes[i];
+			functions[currentFunction].variables[sv.name] = sv;
+		}
+	}
 
 	return true;
 }

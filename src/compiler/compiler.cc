@@ -41,6 +41,12 @@ void Compiler::addBasicTypes() {
 }
 
 Type *Compiler::getTypeFromName(std::string name) {
+	for (auto &[structName, strukt] : structs) {
+		if (structName == name) {
+			return strukt.type;
+		}
+	}
+
 	if (!types.contains(name)) {
 		ERROR("Invalid type: {}", name);
 		return nullptr;

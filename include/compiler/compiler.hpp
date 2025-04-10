@@ -19,9 +19,9 @@ typedef struct WofIfStatement {
 
 typedef struct WofStruct {
 	llvm::StructType *type;
-	std::map<std::string, llvm::Type *> publicFields;
-	std::map<std::string, llvm::Type *> privateFields;
-	std::vector<llvm::Type *> mergedTypes;
+	std::vector<llvm::Type *> fieldTypes;
+	std::vector<std::string> fieldNames;
+	std::vector<std::string> privateFields;
 	std::string name;
 } WofStruct;
 
