@@ -19,6 +19,7 @@ Compiler::Compiler(std::string moduleName, Lexer &lexer) : builder(context), fmo
 	addBasicTypes();
 
 	ifID = 0;
+	whileID = 0;
 }
 
 void Compiler::addBasicTypes() {

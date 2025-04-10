@@ -95,8 +95,8 @@ bool Compiler::doFunction(SExprObject object) {
 	}
 
 	if (!functions[currentFunction].block->getTerminator()) {
-		ERROR("[{}] {} doesn't return", name.line, functions[currentFunction].name);
-		return false;
+		// ERROR("[{}] {} doesn't return", name.line, functions[currentFunction].name);
+		// return false;
 	}
 
 	return true;

@@ -35,6 +35,10 @@ bool Compiler::doBlock(SExprObject object) {
 				if (!doEndif(obj))
 					return false;
 				success = true;
+			} else if (obj.children[0].token.valueS == "while") {
+				if (!doWhile(obj))
+					return false;
+				success = true;
 			}
 
 			// If nothing above matches, maybe it's a raw expression or a function call

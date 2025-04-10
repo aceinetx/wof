@@ -16,6 +16,13 @@ typedef struct WofIfStatement {
 	bool elif;
 } WofIfStatement;
 
+typedef struct WofLoop {
+	llvm::BasicBlock *condBlock;
+	llvm::BasicBlock *block;
+	llvm::BasicBlock *mergeBlock;
+	SExprObject condition;
+} WofLoop;
+
 typedef struct WofFunction {
 	llvm::Function *function;
 	llvm::BasicBlock *block;
@@ -39,6 +46,7 @@ public:
 	std::map<std::string, llvm::Type *> types;
 
 	unsigned int ifID;
+	unsigned int whileID;
 
 	std::string currentFunction;
 
@@ -67,6 +75,8 @@ public:
 	bool doElse(SExprObject object);
 	bool doElif(SExprObject object);
 	bool doEndif(SExprObject object);
+
+	bool doWhile(SExprObject object);
 
 	llvm::Value *doExpr(SExprObject);
 };

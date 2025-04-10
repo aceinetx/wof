@@ -13,6 +13,8 @@ bool Compiler::doIf(SExprObject object) {
 	SExprObject block = object.children[2];
 
 	Value *comparisonValue = doExpr(comparison);
+	if (!comparisonValue)
+		return false;
 
 	WofFunction &func = functions[currentFunction];
 
