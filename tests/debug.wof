@@ -2,18 +2,13 @@
 
 (extern i32 printf ptr vararg)
 
-(struct Point (
-	(var public i32 x)
-	(var private i32 y)
-))
-
 (fun i32 main () (
-	(var Point point)
+	(var Vec2 vec)
 
-	(assign point_x 69)
-	(assign point_y 42)
+	(assign vec_x 69)
+	(assign vec_y 42)
 
-	(printf "%d %d\n" point_x point_y)
+	(printf "%f %f\n" vec_x vec_y)
 
 	(return 0)
 ))

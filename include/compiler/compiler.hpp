@@ -66,6 +66,8 @@ public:
 	llvm::Value *castValue(llvm::Value *value, llvm::Type *targetType);
 
 	void addBasicTypes();
+	void addAdvancedTypes();
+
 	llvm::Type *getTypeFromName(std::string name);
 
 	bool compile();

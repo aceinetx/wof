@@ -17,6 +17,7 @@ Compiler::Compiler(std::string moduleName, Lexer &lexer) : builder(context), fmo
 	InitializeAllAsmPrinters();
 
 	addBasicTypes();
+	addAdvancedTypes();
 
 	ifID = 0;
 	whileID = 0;
@@ -38,6 +39,23 @@ void Compiler::addBasicTypes() {
 
 	types["u0"] = builder.getVoidTy();
 	types["ptr"] = PointerType::get(builder.getVoidTy(), 0);
+}
+
+void Compiler::addAdvancedTypes() {
+	WofStruct vec2, vec3;
+	vec2.fieldNames = {"x", "y"};
+	vec2.fieldTypes = {builder.getDoubleTy(), builder.getDoubleTy()};
+	vec2.name = "Vec2";
+	vec2.privateFields = {};
+	vec2.type = StructType::create(context, vec2.fieldTypes, vec2.name);
+	structs[vec2.name] = vec2;
+
+	vec3.fieldNames = {"x", "y", "z"};
+	vec3.fieldTypes = {builder.getDoubleTy(), builder.getDoubleTy(), builder.getDoubleTy()};
+	vec3.name = "Vec3";
+	vec3.privateFields = {};
+	vec3.type = StructType::create(context, vec3.fieldTypes, vec3.name);
+	structs[vec3.name] = vec3;
 }
 
 Type *Compiler::getTypeFromName(std::string name) {
