@@ -85,40 +85,55 @@ Value *Compiler::doExpr(SExprObject object) {
 		}
 
 		if (object.children[0].token.type == Token::IDENTIFIER) {
-			Token name = object.children[0].token;
-			Function *func;
-			if (functions.contains(name.valueS)) {
-				func = functions[name.valueS].function;
+			if (object.children[0].token.valueS == "addrof") {
+				if (object.children.size() != 2) {
+					ERROR("[{}] addrof requires 2 operands", object.children[0].token.line);
+					return nullptr;
+				}
+
+				Token name = object.children[1].token;
+				if (name.type != Token::IDENTIFIER) {
+					ERROR("[{}] addrof variable name should be an identifier", name.line);
+					return nullptr;
+				}
+
+				return getVariable(name.valueS)->value;
 			} else {
-				func = fmodule.getFunction(name.valueS); // Fallback to this if a function doesn't exist in wof's registry (for example, when externed)
-			}
+				Token name = object.children[0].token;
+				Function *func;
+				if (functions.contains(name.valueS)) {
+					func = functions[name.valueS].function;
+				} else {
+					func = fmodule.getFunction(name.valueS); // Fallback to this if a function doesn't exist in wof's registry (for example, when externed)
+				}
 
-			if (!func) {
-				ERROR("[{}] Undefined function: {}", name.line, name.valueS);
-				return nullptr;
-			}
-
-			std::vector<Value *> args = {};
-			std::vector<Type *> argTypes = getFunctionParameterTypes(func);
-
-			for (int i = 1; i < object.children.size(); i++) {
-				Value *valueRaw = doExpr(object.children[i]);
-				if (!valueRaw) {
+				if (!func) {
+					ERROR("[{}] Undefined function: {}", name.line, name.valueS);
 					return nullptr;
 				}
 
-				Value *value = valueRaw;
-				if (i <= func->getFunctionType()->getNumParams()) {
-					// If the argument is not in vararg zone, then cast it to the needed type
-					value = castValue(valueRaw, argTypes[i - 1]);
+				std::vector<Value *> args = {};
+				std::vector<Type *> argTypes = getFunctionParameterTypes(func);
+
+				for (int i = 1; i < object.children.size(); i++) {
+					Value *valueRaw = doExpr(object.children[i]);
+					if (!valueRaw) {
+						return nullptr;
+					}
+
+					Value *value = valueRaw;
+					if (i <= func->getFunctionType()->getNumParams()) {
+						// If the argument is not in vararg zone, then cast it to the needed type
+						value = castValue(valueRaw, argTypes[i - 1]);
+					}
+					if (!value)
+						return nullptr;
+
+					args.push_back(value);
 				}
-				if (!value)
-					return nullptr;
 
-				args.push_back(value);
+				return builder.CreateCall(func, args);
 			}
-
-			return builder.CreateCall(func, args);
 		}
 	}
 
