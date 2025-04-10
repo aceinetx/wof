@@ -78,6 +78,7 @@ bool Compiler::doFunction(SExprObject object) {
 	for (int i = 0; i < argNames.size(); i++) {
 		std::string argName = argNames.at(i);
 		Type *argType = argTypes.at(i);
+
 		Value *var = builder.CreateAlloca(argType);
 		builder.CreateStore(arg, var);
 
@@ -85,6 +86,13 @@ bool Compiler::doFunction(SExprObject object) {
 		wofVar.value = var;
 		wofVar.type = argType;
 		wofVar.name = argName;
+
+		for (auto &[_, strukt] : structs) {
+			if (strukt.type == argType) {
+				decayStruct(strukt, wofVar);
+				break;
+			}
+		}
 
 		functions[currentFunction].variables[argName] = wofVar;
 		arg = fnArgs++;
