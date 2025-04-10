@@ -89,7 +89,9 @@ public:
 	bool doWhile(SExprObject object);
 
 	bool doStruct(SExprObject object);
-	bool doStructVar(SExprObject object, WofStruct &struc);
+	bool doStructVar(SExprObject object, WofStruct &strukt);
+
+	bool decayStruct(WofStruct &strukt, WofVariable &struktVar);
 
 	llvm::Value *doExpr(SExprObject);
 };

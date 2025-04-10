@@ -3,7 +3,7 @@
 
 using namespace llvm;
 
-bool Compiler::doStructVar(SExprObject object, WofStruct &struc) {
+bool Compiler::doStructVar(SExprObject object, WofStruct &strukt) {
 	unsigned int line = object.children[0].token.line;
 	if (object.children.size() != 4) {
 		ERROR("[{}] VAR in struct should have 4 operands", line);
@@ -35,8 +35,8 @@ bool Compiler::doStructVar(SExprObject object, WofStruct &struc) {
 		return false;
 	}
 
-	struc.fieldNames.push_back(varName.valueS);
-	struc.fieldTypes.push_back(llvmVarType);
+	strukt.fieldNames.push_back(varName.valueS);
+	strukt.fieldTypes.push_back(llvmVarType);
 
 	if (access.valueS != "private" && access.valueS != "public") {
 		ERROR("[{}] No such access modifier", line);
@@ -44,7 +44,7 @@ bool Compiler::doStructVar(SExprObject object, WofStruct &struc) {
 	}
 
 	if (access.valueS == "private") {
-		struc.privateFields.push_back(varName.valueS);
+		strukt.privateFields.push_back(varName.valueS);
 	}
 
 	return true;
@@ -70,18 +70,18 @@ bool Compiler::doStruct(SExprObject object) {
 	}
 
 	structs[name.token.valueS] = (WofStruct){};
-	WofStruct &struc = structs[name.token.valueS];
-	struc.name = name.token.valueS;
+	WofStruct &strukt = structs[name.token.valueS];
+	strukt.name = name.token.valueS;
 
 	for (SExprObject &obj : block.children) {
 		if (obj.children.size() > 0) {
 			if (obj.children[0].token.valueS == "var") {
-				doStructVar(obj, struc);
+				doStructVar(obj, strukt);
 			}
 		}
 	}
 
-	struc.type = StructType::create(context, struc.fieldTypes, struc.name);
+	strukt.type = StructType::create(context, strukt.fieldTypes, strukt.name);
 
 	return true;
 }
