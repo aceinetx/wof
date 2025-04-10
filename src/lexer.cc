@@ -132,6 +132,12 @@ Token Lexer::next() {
 			token = str();
 			replace(token.valueS, "\\n", "\n");
 			replace(token.valueS, "\\r", "\r");
+		} else if (c == '\'') {
+			if (pos + 2 < code.size() && code[pos + 2] == '\'') {
+				token.type = Token::INTEGER;
+				token.valueI = code[pos + 1];
+				pos += 2;
+			}
 		} else if (isOperator(c)) {
 			token.type = Token::OPERATOR;
 			token.valueS = c;
