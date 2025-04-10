@@ -17,19 +17,22 @@ bool Compiler::doAssign(SExprObject object) {
 		return false;
 	}
 
-	WofVariable &var = functions[currentFunction].variables[name.valueS];
+	WofVariable *var = getVariable(name.valueS);
+	if (!var) {
+		return false;
+	}
 
 	Value *valueRaw = doExpr(expr);
 	if (!valueRaw) {
 		return false;
 	}
 
-	Value *value = castValue(valueRaw, var.type);
+	Value *value = castValue(valueRaw, var->type);
 	if (!value) {
 		return false;
 	}
 
-	builder.CreateStore(value, var.value);
+	builder.CreateStore(value, var->value);
 
 	return true;
 }

@@ -24,15 +24,13 @@ Value *Compiler::doExpr(SExprObject object) {
 			Constant *cnst = ConstantFP::get(type, object.token.valueF);
 			return cnst;
 		} else if (object.token.type == Token::IDENTIFIER) {
-			WofFunction &func = functions[currentFunction];
-			if (!func.variables.contains(object.token.valueS)) {
-				ERROR("[{}] Undefined variable", object.token.line);
+			WofVariable *var = getVariable(object.token.valueS);
+			if (!var) {
 				return nullptr;
 			}
-			WofVariable &var = func.variables[object.token.valueS];
 
 			// Load the variable and return it's value
-			Value *value = builder.CreateLoad(var.type, var.value);
+			Value *value = builder.CreateLoad(var->type, var->value);
 			return value;
 		} else if (object.token.type == Token::STRING) {
 			// Create a constant string and return it's address

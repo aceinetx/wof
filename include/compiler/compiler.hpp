@@ -93,5 +93,7 @@ public:
 
 	bool decayStruct(WofStruct &strukt, WofVariable &struktVar);
 
+	WofVariable *getVariable(std::string name);
+
 	llvm::Value *doExpr(SExprObject);
 };

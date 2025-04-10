@@ -55,6 +55,16 @@ Type *Compiler::getTypeFromName(std::string name) {
 	return types[name];
 }
 
+WofVariable *Compiler::getVariable(std::string name) {
+	auto &vars = functions[currentFunction].variables;
+	auto it = vars.find(name);
+	if (it != vars.end()) {
+		return &it->second;
+	}
+	ERROR("Undefined variable {}", name);
+	return nullptr;
+}
+
 bool Compiler::compile() {
 	SExprObject object = sexpr.next();
 	while (object.token.type != Token::END) {

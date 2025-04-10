@@ -4,7 +4,7 @@
 
 (struct Point (
 	(var public i32 x)
-	(var public i32 y)
+	(var private i32 y)
 ))
 
 (fun i32 main () (
