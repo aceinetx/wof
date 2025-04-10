@@ -59,6 +59,9 @@ bool Compiler::compile() {
 			} else if (object.children[0].token.valueS == "extern") {
 				if (!doExtern(object))
 					return false;
+			} else if (object.children[0].token.valueS == "struct") {
+				if (!doStruct(object))
+					return false;
 			}
 		}
 		object = sexpr.next();

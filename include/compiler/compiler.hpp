@@ -1,5 +1,6 @@
 #pragma once
 #include <lexer.hpp>
+#include <llvm/IR/DerivedTypes.h>
 #include <pch.hpp>
 #include <sexpr.hpp>
 
@@ -15,6 +16,14 @@ typedef struct WofIfStatement {
 	llvm::BasicBlock *mergeBlock;
 	bool elif;
 } WofIfStatement;
+
+typedef struct WofStruct {
+	llvm::StructType *type;
+	std::map<std::string, llvm::Type *> publicFields;
+	std::map<std::string, llvm::Type *> privateFields;
+	std::vector<llvm::Type *> mergedTypes;
+	std::string name;
+} WofStruct;
 
 typedef struct WofLoop {
 	llvm::BasicBlock *condBlock;
@@ -43,6 +52,7 @@ public:
 	SExpr sexpr;
 
 	std::map<std::string, WofFunction> functions;
+	std::map<std::string, WofStruct> structs;
 	std::map<std::string, llvm::Type *> types;
 
 	unsigned int ifID;
@@ -77,6 +87,9 @@ public:
 	bool doEndif(SExprObject object);
 
 	bool doWhile(SExprObject object);
+
+	bool doStruct(SExprObject object);
+	bool doStructVar(SExprObject object, WofStruct &struc);
 
 	llvm::Value *doExpr(SExprObject);
 };
