@@ -1,6 +1,6 @@
 #pragma once
+#include <compiler/wtype.hpp>
 #include <lexer.hpp>
-#include <llvm/IR/DerivedTypes.h>
 #include <pch.hpp>
 #include <sexpr.hpp>
 
@@ -68,7 +68,7 @@ public:
 	void addBasicTypes();
 	void addAdvancedTypes();
 
-	llvm::Type *getTypeFromName(std::string name);
+	wtype getTypeFromName(std::string name);
 
 	bool compile();
 	bool emitObject(std::string output);

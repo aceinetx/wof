@@ -13,7 +13,6 @@ typedef struct wtype {
 	llvm::Type *pointee = nullptr;
 	unsigned int pointCount = 0;
 
-	wtype();
 	wtype(llvm::Type *type = nullptr, llvm::Type *pointee = nullptr, unsigned int pointCount = 0);
 
 	operator llvm::Type *() const;

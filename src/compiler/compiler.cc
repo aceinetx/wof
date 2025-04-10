@@ -1,4 +1,5 @@
 #include <compiler/compiler.hpp>
+#include <llvm/IR/DerivedTypes.h>
 #include <llvm/IR/LegacyPassManager.h>
 #include <llvm/Support/CodeGen.h>
 #include <llvm/Support/FileSystem.h>
@@ -58,10 +59,12 @@ void Compiler::addAdvancedTypes() {
 	structs[vec3.name] = vec3;
 }
 
-Type *Compiler::getTypeFromName(std::string name) {
+wtype Compiler::getTypeFromName(std::string name) {
+	wtype type;
+
 	for (auto &[structName, strukt] : structs) {
 		if (structName == name) {
-			return strukt.type;
+			type.type = strukt.type;
 		}
 	}
 
@@ -70,7 +73,17 @@ Type *Compiler::getTypeFromName(std::string name) {
 		return nullptr;
 	}
 
-	return types[name];
+	type.type = types[name];
+
+	if (name.starts_with('_')) {
+		type.pointCount = name.find_last_not_of("_");
+		type.pointee = type.type;
+		for (unsigned int i = 0; i < type.pointCount; i++) {
+			type.type = PointerType::get(type.type, 0);
+		}
+	}
+
+	return type;
 }
 
 WofVariable *Compiler::getVariable(std::string name) {
