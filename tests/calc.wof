@@ -1,18 +1,18 @@
 (extern i32 printf ptr vararg)
 (extern i32 scanf ptr vararg)
 
-(fun i32 performOperation ((i8 operand) (i64 left) (i64 right)) (
+(fun i64 performOperation ((i8 operand) (i64 left) (i64 right)) (
 	(var i64 result)
 	(assign result 0)
 
 	(if (== operand '+') (
-		(assign result (+ left right))	
+		(assign result (+ left right))
 	))
 	(elif (== operand '-') (
-		(assign result (- left right))	
+		(assign result (- left right))
 	))
 	(elif (== operand '*') (
-		(assign result (* left right))	
+		(assign result (* left right))
 	))
 	(endif)
 
@@ -25,13 +25,13 @@
 	(var i8 op)
 
 	(printf "enter first number: ")
-	(scanf "%d" (addrof first))
+	(scanf "%ld" (addrof first))
 	(printf "enter operand: ")
 	(scanf " %c" (addrof op))
 	(printf "enter second number: ")
-	(scanf "%d" (addrof second))
+	(scanf "%ld" (addrof second))
 
-	(printf "result: %d\n" (performOperation op first second))
+	(printf "result: %ld\n" (performOperation op first second))
 
 	(return 0)
 ))
