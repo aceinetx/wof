@@ -5,7 +5,7 @@
 #include <sexpr.hpp>
 #include <util.hpp>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 	unsigned int i;
 	std::vector<std::string> sources;
 	std::string code;
@@ -47,7 +47,7 @@ options:
 		return 1;
 	}
 
-	for (std::string &source : sources) {
+	for (std::string& source : sources) {
 		code += readFile(source) + "\n\n";
 	}
 

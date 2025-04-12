@@ -1,6 +1,6 @@
 #include <log.hpp>
 
-Log &Log::getInstance() {
+Log& Log::getInstance() {
 	static Log instance;
 	return instance;
 }

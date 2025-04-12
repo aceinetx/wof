@@ -1,7 +1,7 @@
 #include <compiler/compiler.hpp>
 #include <log.hpp>
 
-bool Compiler::decayStruct(WofStruct &strukt, WofVariable &struktVar) {
+bool Compiler::decayStruct(WofStruct& strukt, WofVariable& struktVar) {
 	for (int i = 0; i < strukt.fieldTypes.size(); i++) {
 		std::string fieldName = struktVar.name + "_" + strukt.fieldNames[i];
 		if (std::count(strukt.privateFields.begin(), strukt.privateFields.end(), strukt.fieldNames[i]) > 0) {

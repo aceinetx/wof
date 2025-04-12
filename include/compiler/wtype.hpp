@@ -8,12 +8,12 @@
 	and this is exactly what it is
 */
 typedef struct wtype {
-	llvm::Type *type;
+	llvm::Type* type;
 
-	llvm::Type *pointee = nullptr;
+	llvm::Type* pointee = nullptr;
 	unsigned int pointCount = 0;
 
-	wtype(llvm::Type *type = nullptr, llvm::Type *pointee = nullptr, unsigned int pointCount = 0);
+	wtype(llvm::Type* type = nullptr, llvm::Type* pointee = nullptr, unsigned int pointCount = 0);
 
-	operator llvm::Type *() const;
+	operator llvm::Type*() const;
 } wtype;

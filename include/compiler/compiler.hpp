@@ -5,37 +5,37 @@
 #include <sexpr.hpp>
 
 typedef struct WofVariable {
-	llvm::Value *value;
+	llvm::Value* value;
 	wtype type;
 	std::string name;
 } WofVariable;
 
 typedef struct WofIfStatement {
-	llvm::BasicBlock *trueBlock;
-	llvm::BasicBlock *falseBlock;
-	llvm::BasicBlock *mergeBlock;
+	llvm::BasicBlock* trueBlock;
+	llvm::BasicBlock* falseBlock;
+	llvm::BasicBlock* mergeBlock;
 	bool elif;
 } WofIfStatement;
 
 typedef struct WofStruct {
-	llvm::StructType *type;
-	std::vector<llvm::Type *> fieldTypes;
+	llvm::StructType* type;
+	std::vector<llvm::Type*> fieldTypes;
 	std::vector<std::string> fieldNames;
 	std::vector<std::string> privateFields;
 	std::string name;
 } WofStruct;
 
 typedef struct WofLoop {
-	llvm::BasicBlock *condBlock;
-	llvm::BasicBlock *block;
-	llvm::BasicBlock *mergeBlock;
+	llvm::BasicBlock* condBlock;
+	llvm::BasicBlock* block;
+	llvm::BasicBlock* mergeBlock;
 	SExprObject condition;
 } WofLoop;
 
 typedef struct WofFunction {
-	llvm::Function *function;
-	llvm::BasicBlock *block;
-	llvm::FunctionType *type;
+	llvm::Function* function;
+	llvm::BasicBlock* block;
+	llvm::FunctionType* type;
 
 	std::string name;
 
@@ -61,9 +61,9 @@ public:
 	std::string currentFunction;
 
 public:
-	Compiler(std::string moduleName, Lexer &lexer);
+	Compiler(std::string moduleName, Lexer& lexer);
 
-	llvm::Value *castValue(llvm::Value *value, llvm::Type *targetType);
+	llvm::Value* castValue(llvm::Value* value, llvm::Type* targetType);
 
 	void addBasicTypes();
 	void addAdvancedTypes();
@@ -91,11 +91,11 @@ public:
 	bool doWhile(SExprObject object);
 
 	bool doStruct(SExprObject object);
-	bool doStructVar(SExprObject object, WofStruct &strukt);
+	bool doStructVar(SExprObject object, WofStruct& strukt);
 
-	bool decayStruct(WofStruct &strukt, WofVariable &struktVar);
+	bool decayStruct(WofStruct& strukt, WofVariable& struktVar);
 
-	WofVariable *getVariable(std::string name);
+	WofVariable* getVariable(std::string name);
 
-	llvm::Value *doExpr(SExprObject);
+	llvm::Value* doExpr(SExprObject);
 };

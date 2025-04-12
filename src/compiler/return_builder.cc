@@ -9,11 +9,11 @@ bool Compiler::doReturn(SExprObject object) {
 			ERROR("[{}] Empty return statement", object.children[0].token.line);
 			return false;
 		}
-		Value *value = doExpr(object.children[1]);
+		Value* value = doExpr(object.children[1]);
 		if (!value) {
 			return false;
 		}
-		Value *castedValue = castValue(value, functions[currentFunction].type->getReturnType());
+		Value* castedValue = castValue(value, functions[currentFunction].type->getReturnType());
 		if (!castedValue) {
 			return false;
 		}

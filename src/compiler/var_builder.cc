@@ -9,8 +9,8 @@ bool Compiler::doVar(SExprObject object) {
 		return false;
 	}
 
-	Token &type = object.children[1].token;
-	Token &name = object.children[2].token;
+	Token& type = object.children[1].token;
+	Token& name = object.children[2].token;
 
 	if (type.type != Token::IDENTIFIER) {
 		ERROR("[{}] Excepted an IDENTIFIER as a type", type.line);
@@ -22,13 +22,13 @@ bool Compiler::doVar(SExprObject object) {
 		return false;
 	}
 
-	Type *varType = getTypeFromName(type.valueS);
+	Type* varType = getTypeFromName(type.valueS);
 	if (!varType) {
 		return false;
 	}
 
-	WofStruct *strukt = nullptr;
-	for (auto &[structName, _strukt] : structs) {
+	WofStruct* strukt = nullptr;
+	for (auto& [structName, _strukt] : structs) {
 		if (_strukt.type == varType) {
 			strukt = &_strukt;
 		}

@@ -3,38 +3,38 @@
 
 using namespace llvm;
 
-std::vector<llvm::Type *> getFunctionParameterTypes(llvm::Function *function) {
-	std::vector<llvm::Type *> paramTypes;
+std::vector<llvm::Type*> getFunctionParameterTypes(llvm::Function* function) {
+	std::vector<llvm::Type*> paramTypes;
 
-	for (auto &arg : function->args()) {
+	for (auto& arg : function->args()) {
 		paramTypes.push_back(arg.getType());
 	}
 
 	return paramTypes;
 }
 
-Value *Compiler::doExpr(SExprObject object) {
+Value* Compiler::doExpr(SExprObject object) {
 	if (object.children.size() == 0) { // If it's an argument to an existing expression
 		if (object.token.type == Token::INTEGER) {
-			Type *type = builder.getInt64Ty();
-			Constant *cnst = ConstantInt::get(type, object.token.valueI);
+			Type* type = builder.getInt64Ty();
+			Constant* cnst = ConstantInt::get(type, object.token.valueI);
 			return cnst;
 		} else if (object.token.type == Token::FLOATING) {
-			Type *type = builder.getDoubleTy();
-			Constant *cnst = ConstantFP::get(type, object.token.valueF);
+			Type* type = builder.getDoubleTy();
+			Constant* cnst = ConstantFP::get(type, object.token.valueF);
 			return cnst;
 		} else if (object.token.type == Token::IDENTIFIER) {
-			WofVariable *var = getVariable(object.token.valueS);
+			WofVariable* var = getVariable(object.token.valueS);
 			if (!var) {
 				return nullptr;
 			}
 
 			// Load the variable and return it's value
-			Value *value = builder.CreateLoad(var->type, var->value);
+			Value* value = builder.CreateLoad(var->type, var->value);
 			return value;
 		} else if (object.token.type == Token::STRING) {
 			// Create a constant string and return it's address
-			Value *value = builder.CreateGlobalString(object.token.valueS);
+			Value* value = builder.CreateGlobalString(object.token.valueS);
 			return value;
 		} else {
 			ERROR("[{}] Invalid one-constant value type ({})", object.token.line, (int)object.token.type);
@@ -43,17 +43,17 @@ Value *Compiler::doExpr(SExprObject object) {
 	} else {
 		if (object.children.size() == 3) {
 			if (object.children[0].token.type == Token::OPERATOR) {
-				Value *left = doExpr(object.children[1]);
+				Value* left = doExpr(object.children[1]);
 				if (!left)
 					return nullptr;
-				Value *rightRaw = doExpr(object.children[2]);
+				Value* rightRaw = doExpr(object.children[2]);
 				if (!rightRaw)
 					return nullptr;
-				Value *right = castValue(rightRaw, left->getType());
+				Value* right = castValue(rightRaw, left->getType());
 				if (!right)
 					return nullptr;
 
-				Value *res = nullptr;
+				Value* res = nullptr;
 
 				std::string op = object.children[0].token.valueS;
 				if (op == "+") {
@@ -100,7 +100,7 @@ Value *Compiler::doExpr(SExprObject object) {
 				return getVariable(name.valueS)->value;
 			} else {
 				Token name = object.children[0].token;
-				Function *func;
+				Function* func;
 				if (functions.contains(name.valueS)) {
 					func = functions[name.valueS].function;
 				} else {
@@ -112,16 +112,16 @@ Value *Compiler::doExpr(SExprObject object) {
 					return nullptr;
 				}
 
-				std::vector<Value *> args = {};
-				std::vector<Type *> argTypes = getFunctionParameterTypes(func);
+				std::vector<Value*> args = {};
+				std::vector<Type*> argTypes = getFunctionParameterTypes(func);
 
 				for (int i = 1; i < object.children.size(); i++) {
-					Value *valueRaw = doExpr(object.children[i]);
+					Value* valueRaw = doExpr(object.children[i]);
 					if (!valueRaw) {
 						return nullptr;
 					}
 
-					Value *value = valueRaw;
+					Value* value = valueRaw;
 					if (i <= func->getFunctionType()->getNumParams()) {
 						// If the argument is not in vararg zone, then cast it to the needed type
 						value = castValue(valueRaw, argTypes[i - 1]);

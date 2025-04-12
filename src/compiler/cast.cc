@@ -3,26 +3,26 @@
 
 using namespace llvm;
 
-std::string getTypeName(llvm::Type *type) {
+std::string getTypeName(llvm::Type* type) {
 	std::string typeName;
 	llvm::raw_string_ostream rso(typeName);
 	type->print(rso);
 	return rso.str();
 }
 
-Value *Compiler::castValue(Value *value, Type *targetType) {
+Value* Compiler::castValue(Value* value, Type* targetType) {
 	// Check if the value is already of the target type
 	if (value->getType() == targetType) {
 		return value; // No cast needed
 	}
 
 	// Handle pointer to integer casts and vice versa
-	if (PointerType *ptrType = dyn_cast<PointerType>(value->getType())) {
+	if (PointerType* ptrType = dyn_cast<PointerType>(value->getType())) {
 		if (targetType->isIntegerTy()) {
 			// Pointer to Integer cast
 			return builder.CreatePtrToInt(value, targetType);
 		}
-	} else if (PointerType *targetPtrType = dyn_cast<PointerType>(targetType)) {
+	} else if (PointerType* targetPtrType = dyn_cast<PointerType>(targetType)) {
 		if (value->getType()->isIntegerTy()) {
 			// Integer to Pointer cast
 			return builder.CreateIntToPtr(value, targetPtrType);
@@ -44,8 +44,8 @@ Value *Compiler::castValue(Value *value, Type *targetType) {
 		return builder.CreateFPToSI(value, targetType);
 	} else if (value->getType()->isIntegerTy() && targetType->isIntegerTy()) {
 		// Handle cases where the bit sizes differ
-		IntegerType *sourceType = dyn_cast<IntegerType>(value->getType());
-		IntegerType *targetIntType = dyn_cast<IntegerType>(targetType);
+		IntegerType* sourceType = dyn_cast<IntegerType>(value->getType());
+		IntegerType* targetIntType = dyn_cast<IntegerType>(targetType);
 
 		if (sourceType && targetIntType) {
 			if (sourceType->getBitWidth() > targetIntType->getBitWidth()) {

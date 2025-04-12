@@ -12,7 +12,7 @@ bool Compiler::doWhile(SExprObject object) {
 	SExprObject comparison = object.children[1];
 	SExprObject block = object.children[2];
 
-	WofFunction &func = functions[currentFunction];
+	WofFunction& func = functions[currentFunction];
 	WofLoop loop = {};
 
 	unsigned int id = ++whileID;
@@ -23,7 +23,7 @@ bool Compiler::doWhile(SExprObject object) {
 	builder.CreateBr(loop.condBlock);
 	builder.SetInsertPoint(loop.condBlock);
 
-	Value *comparisonValue = doExpr(comparison);
+	Value* comparisonValue = doExpr(comparison);
 	if (!comparisonValue)
 		return false;
 

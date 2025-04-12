@@ -4,7 +4,7 @@
 using namespace llvm;
 
 bool Compiler::doBlock(SExprObject object) {
-	for (SExprObject &obj : object.children) {
+	for (SExprObject& obj : object.children) {
 		bool success = false;
 		if (obj.children.size() > 0) {
 			if (obj.children[0].token.valueS == "var") {

@@ -14,9 +14,9 @@ public:
 
 class SExpr {
 private:
-	Lexer &lexer;
+	Lexer& lexer;
 
 public:
-	SExpr(Lexer &lexer);
+	SExpr(Lexer& lexer);
 	SExprObject next();
 };

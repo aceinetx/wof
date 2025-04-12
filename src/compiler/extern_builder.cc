@@ -8,7 +8,7 @@ bool Compiler::doExtern(SExprObject object) {
 		ERROR("[{}] Extern should have at least 3 operands", object.children[0].token.line);
 		return false;
 	}
-	for (SExprObject &obj : object.children) {
+	for (SExprObject& obj : object.children) {
 		if (obj.token.type != Token::IDENTIFIER) {
 			ERROR("[{}] Everything in extern should be an identifier", object.children[0].token.line);
 			return false;
@@ -19,7 +19,7 @@ bool Compiler::doExtern(SExprObject object) {
 	if (!retType.type)
 		return false;
 	Token name = object.children[2].token;
-	std::vector<Type *> argTypes;
+	std::vector<Type*> argTypes;
 	bool vararg = false;
 
 	for (int i = 3; i < object.children.size(); i++) {
@@ -28,13 +28,13 @@ bool Compiler::doExtern(SExprObject object) {
 			break;
 		}
 
-		Type *type = getTypeFromName(object.children[i].token.valueS);
+		Type* type = getTypeFromName(object.children[i].token.valueS);
 		if (!type)
 			return false;
 		argTypes.push_back(type);
 	}
 
-	FunctionType *params = FunctionType::get(retType, argTypes, vararg);
+	FunctionType* params = FunctionType::get(retType, argTypes, vararg);
 	fmodule.getOrInsertFunction(name.valueS, params);
 
 	return true;

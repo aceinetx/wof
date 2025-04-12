@@ -9,14 +9,14 @@ bool Compiler::doElse(SExprObject object) {
 		return false;
 	}
 
-	WofFunction &func = functions[currentFunction];
+	WofFunction& func = functions[currentFunction];
 	if (func.ifStatements.empty()) {
 		ERROR("[{}] No if-statements to else", object.children[0].token.line);
 		return false;
 	}
 
 	SExprObject block = object.children[1];
-	WofIfStatement &ifst = func.ifStatements.top();
+	WofIfStatement& ifst = func.ifStatements.top();
 
 	// Generate else block code in the false block
 	builder.SetInsertPoint(ifst.falseBlock);

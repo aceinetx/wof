@@ -9,12 +9,12 @@ bool Compiler::doFunction(SExprObject object) {
 		return false;
 	}
 
-	Token &type = object.children[1].token;
-	Token &name = object.children[2].token;
-	SExprObject &args = object.children[3];
-	SExprObject &body = object.children[4];
+	Token& type = object.children[1].token;
+	Token& name = object.children[2].token;
+	SExprObject& args = object.children[3];
+	SExprObject& body = object.children[4];
 
-	std::vector<Type *> argTypes;
+	std::vector<Type*> argTypes;
 	std::vector<std::string> argNames;
 
 	if (type.type != Token::IDENTIFIER) {
@@ -27,7 +27,7 @@ bool Compiler::doFunction(SExprObject object) {
 		return false;
 	}
 
-	for (SExprObject &arg : args.children) {
+	for (SExprObject& arg : args.children) {
 		if (arg.children.size() == 0) {
 			ERROR("[{}] Argument is supposed to be wrapped in parens ()", name.line);
 			return false;
@@ -55,7 +55,7 @@ bool Compiler::doFunction(SExprObject object) {
 		}
 	}
 
-	Type *retType = getTypeFromName(type.valueS);
+	Type* retType = getTypeFromName(type.valueS);
 	if (!retType) {
 		return false;
 	}
@@ -74,12 +74,12 @@ bool Compiler::doFunction(SExprObject object) {
 
 	// create arguments for future use
 	auto fnArgs = function.function->arg_begin();
-	Value *arg = fnArgs++;
+	Value* arg = fnArgs++;
 	for (int i = 0; i < argNames.size(); i++) {
 		std::string argName = argNames.at(i);
-		Type *argType = argTypes.at(i);
+		Type* argType = argTypes.at(i);
 
-		Value *var = builder.CreateAlloca(argType);
+		Value* var = builder.CreateAlloca(argType);
 		builder.CreateStore(arg, var);
 
 		WofVariable wofVar;
@@ -87,7 +87,7 @@ bool Compiler::doFunction(SExprObject object) {
 		wofVar.type = argType;
 		wofVar.name = argName;
 
-		for (auto &[_, strukt] : structs) {
+		for (auto& [_, strukt] : structs) {
 			if (strukt.type == argType) {
 				decayStruct(strukt, wofVar);
 				break;

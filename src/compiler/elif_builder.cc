@@ -9,7 +9,7 @@ bool Compiler::doElif(SExprObject object) {
 		return false;
 	}
 
-	WofFunction &func = functions[currentFunction];
+	WofFunction& func = functions[currentFunction];
 	if (func.ifStatements.empty()) {
 		ERROR("[{}] No if-statements to elif", object.children[0].token.line);
 		return false;
@@ -18,12 +18,12 @@ bool Compiler::doElif(SExprObject object) {
 	SExprObject comparison = object.children[1];
 	SExprObject block = object.children[2];
 
-	Value *comparisonValue = doExpr(comparison);
-	WofIfStatement &parentIfst = func.ifStatements.top();
+	Value* comparisonValue = doExpr(comparison);
+	WofIfStatement& parentIfst = func.ifStatements.top();
 
 	unsigned int id = ++ifID;
-	BasicBlock *trueBlock = BasicBlock::Create(context, std::format("{}t", id), func.function);
-	BasicBlock *falseBlock = BasicBlock::Create(context, std::format("{}f", id), func.function);
+	BasicBlock* trueBlock = BasicBlock::Create(context, std::format("{}t", id), func.function);
+	BasicBlock* falseBlock = BasicBlock::Create(context, std::format("{}f", id), func.function);
 
 	builder.SetInsertPoint(parentIfst.falseBlock);
 	builder.CreateCondBr(comparisonValue, trueBlock, falseBlock);

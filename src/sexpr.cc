@@ -4,7 +4,7 @@ SExprObject::SExprObject() {
 	token = Token::create();
 }
 
-SExpr::SExpr(Lexer &lexer) : lexer(lexer) {
+SExpr::SExpr(Lexer& lexer) : lexer(lexer) {
 }
 
 SExprObject SExpr::next() {

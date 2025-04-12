@@ -4,7 +4,7 @@
 
 using namespace llvm;
 
-static unsigned int countLeadingUnderscores(const std::string &str) {
+static unsigned int countLeadingUnderscores(const std::string& str) {
 	unsigned int count = 0;
 	for (char ch : str) {
 		if (ch == '_') {
@@ -16,7 +16,7 @@ static unsigned int countLeadingUnderscores(const std::string &str) {
 	return count;
 }
 
-Compiler::Compiler(std::string moduleName, Lexer &lexer) : builder(context), fmodule(moduleName, context), sexpr(lexer) {
+Compiler::Compiler(std::string moduleName, Lexer& lexer) : builder(context), fmodule(moduleName, context), sexpr(lexer) {
 	InitializeNativeTarget();
 	InitializeAllTargetInfos();
 	InitializeAllTargets();
@@ -71,7 +71,7 @@ wtype Compiler::getTypeFromName(std::string name) {
 	std::string cleanName = name;
 	replace(cleanName, "_", "");
 
-	for (auto &[structName, strukt] : structs) {
+	for (auto& [structName, strukt] : structs) {
 		if (structName == cleanName) {
 			type.type = strukt.type;
 		}
@@ -95,8 +95,8 @@ wtype Compiler::getTypeFromName(std::string name) {
 	return type;
 }
 
-WofVariable *Compiler::getVariable(std::string name) {
-	auto &vars = functions[currentFunction].variables;
+WofVariable* Compiler::getVariable(std::string name) {
+	auto& vars = functions[currentFunction].variables;
 	auto it = vars.find(name);
 	if (it != vars.end()) {
 		return &it->second;

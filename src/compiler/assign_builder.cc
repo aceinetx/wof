@@ -9,25 +9,25 @@ bool Compiler::doAssign(SExprObject object) {
 		return false;
 	}
 
-	Token &name = object.children[1].token;
-	SExprObject &expr = object.children[2];
+	Token& name = object.children[1].token;
+	SExprObject& expr = object.children[2];
 
 	if (name.type != Token::IDENTIFIER) {
 		ERROR("[{}] Excepted an IDENTIFIER as a name", name.line);
 		return false;
 	}
 
-	WofVariable *var = getVariable(name.valueS);
+	WofVariable* var = getVariable(name.valueS);
 	if (!var) {
 		return false;
 	}
 
-	Value *valueRaw = doExpr(expr);
+	Value* valueRaw = doExpr(expr);
 	if (!valueRaw) {
 		return false;
 	}
 
-	Value *value = castValue(valueRaw, var->type);
+	Value* value = castValue(valueRaw, var->type);
 	if (!value) {
 		return false;
 	}

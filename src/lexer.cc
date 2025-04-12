@@ -45,12 +45,12 @@ Token Lexer::number() {
 	token.line = line;
 
 	while (pos < code.length()) {
-		char &c = code.at(pos);
+		char& c = code.at(pos);
 
 		if (c == '.') {
 			token.type = Token::FLOATING;
 		} else if (isDigit(c)) {
-			unsigned int *part = &left_part;
+			unsigned int* part = &left_part;
 			if (token.type == Token::FLOATING) {
 				part = &right_part;
 				right_part_digits++;
@@ -81,7 +81,7 @@ Token Lexer::identifier() {
 	token.line = line;
 
 	while (pos < code.length()) {
-		char &c = code.at(pos);
+		char& c = code.at(pos);
 
 		if (isIdentifierChar(c) || isDigit(c)) {
 			token.valueS.push_back(c);
@@ -103,7 +103,7 @@ Token Lexer::str() {
 
 	pos++;
 	while (pos < code.length()) {
-		char &c = code.at(pos);
+		char& c = code.at(pos);
 
 		if (c == '"') {
 			pos++;
@@ -121,7 +121,7 @@ Token Lexer::str() {
 Token Lexer::next() {
 	Token token = Token::create();
 	while (pos < code.length()) {
-		char &c = code.at(pos);
+		char& c = code.at(pos);
 		Token tok = Token::create();
 
 		if (isDigit(c)) {

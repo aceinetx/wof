@@ -3,16 +3,16 @@
 
 using namespace llvm;
 
-bool Compiler::doStructVar(SExprObject object, WofStruct &strukt) {
+bool Compiler::doStructVar(SExprObject object, WofStruct& strukt) {
 	unsigned int line = object.children[0].token.line;
 	if (object.children.size() != 4) {
 		ERROR("[{}] VAR in struct should have 4 operands", line);
 		return false;
 	}
 
-	Token &access = object.children[1].token;
-	Token &type = object.children[2].token;
-	Token &varName = object.children[3].token;
+	Token& access = object.children[1].token;
+	Token& type = object.children[2].token;
+	Token& varName = object.children[3].token;
 
 	if (access.type != Token::IDENTIFIER) {
 		ERROR("[{}] struct var's second operand should be an identifier", line);
@@ -29,7 +29,7 @@ bool Compiler::doStructVar(SExprObject object, WofStruct &strukt) {
 		return false;
 	}
 
-	Type *llvmVarType = getTypeFromName(type.valueS);
+	Type* llvmVarType = getTypeFromName(type.valueS);
 	if (!llvmVarType) {
 		ERROR("[{}] no such type for struct var", line);
 		return false;
@@ -70,10 +70,10 @@ bool Compiler::doStruct(SExprObject object) {
 	}
 
 	structs[name.token.valueS] = (WofStruct){};
-	WofStruct &strukt = structs[name.token.valueS];
+	WofStruct& strukt = structs[name.token.valueS];
 	strukt.name = name.token.valueS;
 
-	for (SExprObject &obj : block.children) {
+	for (SExprObject& obj : block.children) {
 		if (obj.children.size() > 0) {
 			if (obj.children[0].token.valueS == "var") {
 				doStructVar(obj, strukt);

@@ -7,7 +7,7 @@
 
 class Log {
 public:
-	static Log &getInstance();
+	static Log& getInstance();
 
 public:
 	void info(std::string s);

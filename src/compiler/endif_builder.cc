@@ -4,18 +4,18 @@
 using namespace llvm;
 
 bool Compiler::doEndif(SExprObject object) {
-	WofFunction &func = functions[currentFunction];
+	WofFunction& func = functions[currentFunction];
 	if (func.ifStatements.empty()) {
 		ERROR("[{}] No if-statements to end", object.children[0].token.line);
 		return false;
 	}
 
-	WofIfStatement &ifst = func.ifStatements.top();
+	WofIfStatement& ifst = func.ifStatements.top();
 
 	// Ensure all blocks branch to merge block if not already terminated
 	if (!ifst.trueBlock->getTerminator())
 		builder.SetInsertPoint(ifst.trueBlock);
-		builder.CreateBr(ifst.mergeBlock);
+	builder.CreateBr(ifst.mergeBlock);
 
 	if (!ifst.falseBlock->getTerminator()) {
 		builder.SetInsertPoint(ifst.falseBlock);
