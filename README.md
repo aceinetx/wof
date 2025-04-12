@@ -1,14 +1,31 @@
 # wof
 S-Expression based programming language 
 ```lisp
-(extern i32 printf ptr vararg)
+(extern i32 printf _i8 vararg)
 
-(fun i32 add ((i32 a) (i32 b)) (
-	(return (+ a b))
+(struct Vec (
+	(var public i32 x)
+	(var public i32 y)
+))
+
+(fun Vec addVecs ((Vec a) (Vec b)) (
+	(var Vec res)
+	(assign res_x (+ a_x b_x))
+	(assign res_y (+ a_y b_y))
+
+	(return res)
 ))
 
 (fun i32 main () (
-	(printf "One & one make %d!\n" (add 1 1))
+	(var Vec a)
+	(var Vec b)
+	(var Vec v)
+
+	(assign a_x 3) (assign a_y 1)
+	(assign b_x 2) (assign b_y 1)
+	(assign v (addVecs a b))
+
+	(printf "%d %d\n" v_x v_y)
 
 	(return 0)
 ))
