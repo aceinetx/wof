@@ -77,12 +77,12 @@ wtype Compiler::getTypeFromName(std::string name) {
 		}
 	}
 
-	if (!types.contains(cleanName)) {
+	if (!types.contains(cleanName) && type.type == nullptr) {
 		ERROR("Invalid type: {}", cleanName);
 		return nullptr;
+	} else if (type.type == nullptr) {
+		type.type = types[cleanName];
 	}
-
-	type.type = types[cleanName];
 
 	if (name.starts_with('_')) {
 		type.pointCount = countLeadingUnderscores(name);
