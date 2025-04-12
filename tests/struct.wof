@@ -1,0 +1,18 @@
+(extern i32 printf _i8 vararg)
+
+(fun Vec2 f () (
+	(var Vec2 vec)
+	(assign vec_x 5)
+	(assign vec_y 2)
+
+	(return vec)
+))
+
+(fun i32 main () (
+	(var Vec2 v)
+	(assign v (f))
+
+	(printf "%f %f\n" v_x v_y)
+
+	(return 0)
+))
